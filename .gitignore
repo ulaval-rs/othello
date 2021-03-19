@@ -1,0 +1,16 @@
+*
+
+!.gitignore
+!README.md
+
+!setup.py
+!requirements.txt
+
+!licenses/
+!licenses/**
+
+!othello/
+!othello/**
+
+*.pyc
+*.pyo
