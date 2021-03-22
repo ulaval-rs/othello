@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtWidgets
 from PySide2.QtWidgets import QWidget
 
 from othello.ui.aggregate import AggregateTab
-from othello.ui.critere_macbeth import CriteriaMacBethTab
+from othello.ui.criteria import CriteriaTab
 
 
 class MainWindow(QWidget):
@@ -17,7 +17,7 @@ class MainWindow(QWidget):
         self.tabs.setGeometry(QtCore.QRect(10, 10, 781, 581))
         self.tabs.setObjectName('tabs')
 
-        self.tab_criteria_macbeth = CriteriaMacBethTab()
+        self.tab_criteria_macbeth = CriteriaTab()
         self.tab_aggregate = AggregateTab()
 
         self.tabs.addTab(self.tab_criteria_macbeth, '')

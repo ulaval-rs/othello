@@ -1,10 +1,14 @@
-import geopandas
 from PySide2 import QtWidgets, QtCore
 
+from othello import gis
+from othello.ui.popup import Popup
 
-class CriteriaMacBethTab(QtWidgets.QWidget):
+
+class CriteriaTab(QtWidgets.QWidget):
 
     def __init__(self):
+        self.df = None
+
         super().__init__()
 
         self.setStyleSheet('')
@@ -61,6 +65,7 @@ class CriteriaMacBethTab(QtWidgets.QWidget):
         self.btn_add_column_to_file = QtWidgets.QPushButton(self)
         self.btn_add_column_to_file.setGeometry(QtCore.QRect(610, 500, 151, 31))
         self.btn_add_column_to_file.setObjectName('btn_add_column_to_file')
+        self.btn_add_column_to_file.clicked.connect(self.write_file)
 
         self.set_labels()
 
@@ -86,10 +91,12 @@ class CriteriaMacBethTab(QtWidgets.QWidget):
 
     def load_file(self):
         filepath = self.inline_file_to_add_criteria_filepath.text()
-        if '.gdb' in filepath.lower():
-            df = geopandas.read_file(filepath, driver='FileGDB')
+        self.df = gis.io.read(filepath)
 
-        else:
-            df = geopandas.read_file(filepath)
+        self.combobox_field_to_select.addItems(self.df.columns)
 
-        self.combobox_field_to_select.addItems(df.columns)
+    def write_file(self):
+        if self.df is None:
+            popup = Popup("Aucune donnée n'a été chargées", self)
+            popup.show()
+
