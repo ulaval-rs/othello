@@ -1,0 +1,2 @@
+class MacbethParserError(ValueError):
+    pass

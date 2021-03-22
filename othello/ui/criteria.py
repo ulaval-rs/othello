@@ -1,7 +1,11 @@
+import configparser
+
 from PySide2 import QtWidgets, QtCore
 from fiona.errors import DriverError
 
 from othello import gis
+from othello.macbeth.errors import MacbethParserError
+from othello.macbeth.parser import MacbethParser
 from othello.ui.popup import Popup
 
 
@@ -9,6 +13,7 @@ class CriteriaTab(QtWidgets.QWidget):
 
     def __init__(self):
         self.df = None
+        self.macbeth_parser = None
 
         super().__init__()
 
@@ -42,7 +47,7 @@ class CriteriaTab(QtWidgets.QWidget):
         self.inline_macbeth_filepath = QtWidgets.QLineEdit(self)
         self.inline_macbeth_filepath.setGeometry(QtCore.QRect(20, 220, 621, 31))
 
-        self.btn_load_macbeth_file = QtWidgets.QPushButton(self)
+        self.btn_load_macbeth_file = QtWidgets.QPushButton(self, clicked=self.browse_macbeth_file)
         self.btn_load_macbeth_file.setGeometry(QtCore.QRect(650, 220, 103, 31))
 
         self.btn_add_column_to_file = QtWidgets.QPushButton(self, clicked=self.write_file)
@@ -77,6 +82,18 @@ class CriteriaTab(QtWidgets.QWidget):
             popup = Popup(f"Erreur de lecture du fichier : {e}", self)
             popup.show()
 
+    def browse_macbeth_file(self):
+        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self)
+        if filepath == '':
+            return
+
+        try:
+            self.macbeth_parser = MacbethParser(filepath)
+            self.inline_macbeth_filepath.setText(filepath)
+        except (MacbethParserError, configparser.MissingSectionHeaderError) as e:
+            popup = Popup(f"Erreur de lecture du fichier : {e}", self)
+            popup.show()
+
     def write_file(self):
         if self.df is None:
             popup = Popup("Aucune donnée n'a été chargée", self)
@@ -85,4 +102,3 @@ class CriteriaTab(QtWidgets.QWidget):
         else:
             filename = QtWidgets.QFileDialog.getSaveFileName(self)
             gis.io.write(self.df, filename[0])
-
