@@ -1,4 +1,5 @@
 from PySide2 import QtWidgets, QtCore
+from fiona.errors import DriverError
 
 from othello import gis
 from othello.ui.popup import Popup
@@ -19,19 +20,14 @@ class CriteriaTab(QtWidgets.QWidget):
         self.label_data_section.setObjectName('label_data_section')
 
         self.inline_file_to_add_criteria_filepath = QtWidgets.QLineEdit(self)
-        self.inline_file_to_add_criteria_filepath.setGeometry(QtCore.QRect(20, 60, 511, 31))
+        self.inline_file_to_add_criteria_filepath.setGeometry(QtCore.QRect(20, 60, 621, 31))
         self.inline_file_to_add_criteria_filepath.setText('')
         self.inline_file_to_add_criteria_filepath.setObjectName('file_to_add_criteria')
 
         self.btn_browse_files_to_add = QtWidgets.QPushButton(self)
-        self.btn_browse_files_to_add.setGeometry(QtCore.QRect(540, 60, 103, 31))
+        self.btn_browse_files_to_add.setGeometry(QtCore.QRect(650, 60, 103, 31))
         self.btn_browse_files_to_add.setObjectName('btn_browse_files_to_add')
         self.btn_browse_files_to_add.clicked.connect(self.browse_files_to_add)
-
-        self.btn_load_file_to_add_data = QtWidgets.QPushButton(self)
-        self.btn_load_file_to_add_data.setGeometry(QtCore.QRect(650, 60, 103, 31))
-        self.btn_load_file_to_add_data.setObjectName('btn_load_file_to_add_data')
-        self.btn_load_file_to_add_data.clicked.connect(self.load_file)
 
         self.label_file_to_add_criteria = QtWidgets.QLabel(self)
         self.label_file_to_add_criteria.setGeometry(QtCore.QRect(20, 40, 311, 19))
@@ -74,7 +70,6 @@ class CriteriaTab(QtWidgets.QWidget):
 
         self.label_file_to_add_criteria.setText('Sélectionner un fichier')
         self.btn_browse_files_to_add.setText('Parcourir')
-        self.btn_load_file_to_add_data.setText('Charger données')
 
         self.label_field_to_select.setText('Champ à transformer')
 
@@ -85,18 +80,22 @@ class CriteriaTab(QtWidgets.QWidget):
         self.btn_add_column_to_file.setText('Ajouter la colonne')
 
     def browse_files_to_add(self):
-        filename = QtWidgets.QFileDialog.getExistingDirectory(self)
+        filepath = QtWidgets.QFileDialog.getExistingDirectory(self)
 
-        self.inline_file_to_add_criteria_filepath.setText(filename)
-
-    def load_file(self):
-        filepath = self.inline_file_to_add_criteria_filepath.text()
-        self.df = gis.io.read(filepath)
-
-        self.combobox_field_to_select.addItems(self.df.columns)
+        try:
+            self.df = gis.io.read(filepath)
+            self.inline_file_to_add_criteria_filepath.setText(filepath)
+            self.combobox_field_to_select.addItems(self.df.columns)
+        except DriverError as e:
+            popup = Popup(f"Erreur de lecture du fichier : {e}"*80, self)
+            popup.show()
 
     def write_file(self):
         if self.df is None:
-            popup = Popup("Aucune donnée n'a été chargées", self)
+            popup = Popup("Aucune donnée n'a été chargée", self)
             popup.show()
+
+        else:
+            filename = QtWidgets.QFileDialog.getSaveFileName(self)
+            gis.io.write(self.df, filename[0])
 
