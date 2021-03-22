@@ -12,5 +12,8 @@
 !othello/
 !othello/**
 
+!tests/
+!tests/**
+
 *.pyc
 *.pyo
