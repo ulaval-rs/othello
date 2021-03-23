@@ -38,4 +38,49 @@ class MacbethParser(ConfigParser):
         return criteria
 
     def get_criterion_parameters(self, criterion: Criterion) -> CriterionParameters:
-        pass
+        """
+        Data structure in .mcb file:
+            NomCourt=Noeud racine
+            ...
+            Nombre niveaux=12
+            ...
+            Niv1=[ toutes références inférieures ]
+            |
+            Niv12=Réseau de transport collectif
+            Niv1short=[ toutes inf ]
+            |
+            Niv12short=[ RTC ]
+            Perm(1)=7
+            |
+            Perm(12)=1
+            ....
+            EchelleCourante1=0.00
+            |
+            EchelleCourante12=2.50
+        """
+        parameters_section = self[f"Parametres du critere {criterion.name}"]
+        short_name = parameters_section['NomCourt']
+        nbr_of_levels = int(parameters_section['Nombre niveaux'])
+
+        levels = []
+        levels_short = []
+        levels_orders = []
+        normalized_weights = []
+        weights = []
+
+        for i in range(1, nbr_of_levels + 1):
+            levels.append(parameters_section[f'Niv{i}'])
+            levels_short.append(parameters_section[f'Niv{i}Short'])
+            levels_orders.append(int(parameters_section[f'Perm({i})']))
+            normalized_weights.append(float(parameters_section[f'EchelleMacbeth{i}']))
+            weights.append(float(parameters_section[f'EchelleCourante{i}']))
+
+        return CriterionParameters(
+            short_name=short_name,
+            nbr_of_levels=nbr_of_levels,
+            levels=levels,
+            levels_short=levels_short,
+            levels_orders=levels_orders,
+            normalized_weights=normalized_weights,
+            weights=weights,
+        )

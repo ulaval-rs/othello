@@ -8,4 +8,3 @@ class Criterion:
     fundamental: bool
     fundamental_group: bool
     expanded: bool
-

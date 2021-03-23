@@ -24,10 +24,28 @@ def test_get_criteria(parser: MacbethParser):
 
     assert len(result) == 14
     assert type(result[0]) == Criterion
+    assert result[0].name == 'Rues partagées'
+    assert result[0].parent_index == 0
+    assert not result[0].fundamental
+    assert not result[0].fundamental_group
+    assert result[0].expanded
 
 
 def test_get_criterion_parameters(parser: MacbethParser, criterion: Criterion):
     result = parser.get_criterion_parameters(criterion)
 
     assert type(result) == CriterionParameters
-    assert False
+    assert result.short_name == 'Noeud racine'
+    assert result.nbr_of_levels == 10
+
+    assert type(result.levels) == list
+    assert type(result.levels_short) == list
+    assert type(result.levels_orders) == list
+    assert type(result.normalized_weights) == list
+    assert type(result.weights) == list
+
+    assert type(result.levels[0]) == str
+    assert type(result.levels_short[0]) == str
+    assert type(result.levels_orders[0]) == int
+    assert type(result.normalized_weights[0]) == float
+    assert type(result.weights[0]) == float
