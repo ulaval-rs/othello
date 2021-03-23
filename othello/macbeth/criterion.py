@@ -9,4 +9,3 @@ class Criterion:
     fundamental_group: bool
     expanded: bool
 
-
