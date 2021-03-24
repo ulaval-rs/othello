@@ -44,8 +44,8 @@ def test_get_criterion_parameters(parser: MacbethParser, criterion: Criterion):
     assert type(result.normalized_weights) == list
     assert type(result.weights) == list
 
-    assert type(result.levels[0]) == str
-    assert type(result.levels_short[0]) == str
+    assert type(result.levels[0]) in (str, float, int)
+    assert type(result.levels_short[0]) in (str, float, int)
     assert type(result.levels_orders[0]) == int
     assert type(result.normalized_weights[0]) == float
     assert type(result.weights[0]) == float

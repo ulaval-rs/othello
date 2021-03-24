@@ -1,9 +1,13 @@
 import configparser
+from typing import Optional, List
 
+import geopandas
 from PySide2 import QtWidgets, QtCore
 from fiona.errors import DriverError
+from scipy.interpolate import interp1d
 
 from othello import gis
+from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.errors import MacbethParserError
 from othello.macbeth.parser import MacbethParser
 from othello.ui.popup import Popup
@@ -12,8 +16,8 @@ from othello.ui.popup import Popup
 class CriteriaTab(QtWidgets.QWidget):
 
     def __init__(self):
-        self.df = None
-        self.macbeth_parser = None
+        self.df: Optional[geopandas.GeoDataFrame] = None
+        self.macbeth_parser: Optional[MacbethParser] = None
 
         super().__init__()
 
@@ -32,8 +36,8 @@ class CriteriaTab(QtWidgets.QWidget):
         self.label_file_to_add_criteria = QtWidgets.QLabel(self)
         self.label_file_to_add_criteria.setGeometry(QtCore.QRect(20, 40, 311, 19))
 
-        self.combobox_field_to_select = QtWidgets.QComboBox(self)
-        self.combobox_field_to_select.setGeometry(QtCore.QRect(20, 120, 731, 31))
+        self.combobox_field = QtWidgets.QComboBox(self)
+        self.combobox_field.setGeometry(QtCore.QRect(20, 120, 731, 31))
 
         self.label_field_to_select = QtWidgets.QLabel(self)
         self.label_field_to_select.setGeometry(QtCore.QRect(20, 100, 311, 19))
@@ -49,6 +53,12 @@ class CriteriaTab(QtWidgets.QWidget):
 
         self.btn_load_macbeth_file = QtWidgets.QPushButton(self, clicked=self.browse_macbeth_file)
         self.btn_load_macbeth_file.setGeometry(QtCore.QRect(650, 220, 103, 31))
+
+        self.label_macbeth_criterion = QtWidgets.QLabel(self)
+        self.label_macbeth_criterion.setGeometry(QtCore.QRect(20, 260, 311, 19))
+
+        self.combobox_macbeth_criterion = QtWidgets.QComboBox(self)
+        self.combobox_macbeth_criterion.setGeometry(QtCore.QRect(20, 280, 731, 31))
 
         self.btn_add_column_to_file = QtWidgets.QPushButton(self, clicked=self.write_file)
         self.btn_add_column_to_file.setGeometry(QtCore.QRect(610, 500, 151, 31))
@@ -67,6 +77,8 @@ class CriteriaTab(QtWidgets.QWidget):
         self.label_macbeth_file_to_select.setText('Sélectionner le fichier M-MACBETH')
         self.btn_load_macbeth_file.setText('Parcourir')
 
+        self.label_macbeth_criterion.setText('Critère à évaluer')
+
         self.btn_add_column_to_file.setText('Ajouter la colonne')
 
     def browse_geo_file(self):
@@ -77,7 +89,7 @@ class CriteriaTab(QtWidgets.QWidget):
         try:
             self.df = gis.io.read(filepath)
             self.inline_file_to_add_criteria_filepath.setText(filepath)
-            self.combobox_field_to_select.addItems(self.df.columns)
+            self.combobox_field.addItems(self.df.columns)
         except DriverError as e:
             popup = Popup(f"Erreur de lecture du fichier : {e}", self)
             popup.show()
@@ -90,6 +102,9 @@ class CriteriaTab(QtWidgets.QWidget):
         try:
             self.macbeth_parser = MacbethParser(filepath)
             self.inline_macbeth_filepath.setText(filepath)
+            self.combobox_macbeth_criterion.addItems(
+                [c.name for c in self.macbeth_parser.get_criteria()]
+            )
         except (MacbethParserError, configparser.MissingSectionHeaderError) as e:
             popup = Popup(f"Erreur de lecture du fichier : {e}", self)
             popup.show()
@@ -98,7 +113,27 @@ class CriteriaTab(QtWidgets.QWidget):
         if self.df is None:
             popup = Popup("Aucune donnée n'a été chargée", self)
             popup.show()
+            return
 
-        else:
-            filename = QtWidgets.QFileDialog.getSaveFileName(self)
+        filename = QtWidgets.QFileDialog.getSaveFileName(self)
+
+        criteria = self.macbeth_parser.get_criteria()
+        criterion_parameters = self.macbeth_parser.get_criterion_parameters(criteria[12])
+
+        try:
+            self.df['macbeth'] = self._evaluate_new_values(
+                series=self.df[self.combobox_field.currentText()],
+                criterion_parameters=criterion_parameters
+            )
+
             gis.io.write(self.df, filename[0])
+        except Exception as e:
+            popup = Popup(str(e), self)
+            popup.show()
+
+    def _evaluate_new_values(self, series: geopandas.GeoSeries, criterion_parameters: CriterionParameters) -> List:
+        x, y = criterion_parameters.levels, criterion_parameters.weights
+        f = interp1d(x, y, kind='linear')
+        new_values = f(series.values)
+
+        return list(new_values)

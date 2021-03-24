@@ -3,6 +3,7 @@ from typing import List
 
 from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.criterion import Criterion
+from othello.macbeth.util import cast
 
 
 class MacbethParser(ConfigParser):
@@ -69,8 +70,8 @@ class MacbethParser(ConfigParser):
         weights = []
 
         for i in range(1, nbr_of_levels + 1):
-            levels.append(parameters_section[f'Niv{i}'])
-            levels_short.append(parameters_section[f'Niv{i}Short'])
+            levels.append(cast(parameters_section[f'Niv{i}']))
+            levels_short.append(cast(parameters_section[f'Niv{i}Short']))
             levels_orders.append(int(parameters_section[f'Perm({i})']))
             normalized_weights.append(float(parameters_section[f'EchelleMacbeth{i}']))
             weights.append(float(parameters_section[f'EchelleCourante{i}']))
