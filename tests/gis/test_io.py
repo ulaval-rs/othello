@@ -19,12 +19,13 @@ class TestRead:
     def teardown_method(self):
         shutil.rmtree(TMP_DIR)
 
-    @pytest.mark.parametrize('filepath, expected_nbr_of_columns', [
-        (GDB_FILEPATH, 34),
-        (SPH_FILEPATH, 5),
+    @pytest.mark.parametrize('filepath, layer, expected_nbr_of_columns', [
+        (GDB_FILEPATH, None, 34),
+        (GDB_FILEPATH, 'ArretsTEST_on_mb', 35),
+        (SPH_FILEPATH, None, 5),
     ])
-    def test_read(self, filepath, expected_nbr_of_columns):
-        result = gis.io.read(filepath)
+    def test_read(self, filepath, layer, expected_nbr_of_columns):
+        result = gis.io.read(filepath, layer)
 
         assert type(result) == geopandas.GeoDataFrame
         assert len(result.columns) == expected_nbr_of_columns

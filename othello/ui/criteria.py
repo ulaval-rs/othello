@@ -91,7 +91,9 @@ class CriteriaTab(QtWidgets.QWidget):
 
     def layer_has_been_selected(self):
         try:
-            self.df = gis.io.read(self.geo_filepath)
+            layer = self.combobox_layer.currentText()
+
+            self.df = gis.io.read(self.geo_filepath, layer=layer)
             self.combobox_field.addItems(self.df.columns)
         except DriverError as e:
             popup = Popup(f"Erreur de lecture du fichier : {e}", self)
