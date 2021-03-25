@@ -115,7 +115,9 @@ class CriteriaTab(QtWidgets.QWidget):
             popup.show()
             return
 
-        filename = QtWidgets.QFileDialog.getSaveFileName(self)
+        filepath = QtWidgets.QFileDialog.getSaveFileName(self)
+        if filepath == '':
+            return
 
         criteria = self.macbeth_parser.get_criteria()
         criterion_parameters = self.macbeth_parser.get_criterion_parameters(criteria[12])
@@ -126,7 +128,7 @@ class CriteriaTab(QtWidgets.QWidget):
                 criterion_parameters=criterion_parameters
             )
 
-            gis.io.write(self.df, filename[0])
+            gis.io.write(self.df, filepath[0])
         except Exception as e:
             popup = Popup(str(e), self)
             popup.show()
