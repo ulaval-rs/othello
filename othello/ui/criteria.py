@@ -155,4 +155,4 @@ class CriteriaTab(QtWidgets.QWidget):
         f = interp1d(x, y, kind='linear')
         new_values = f(series.values)
 
-        return list(new_values)
+        return [round(value, 2) for value in new_values]
