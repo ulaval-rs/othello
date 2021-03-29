@@ -20,9 +20,9 @@ from othello.ui.popup import Popup
 class CriteriaTab(QtWidgets.QWidget):
 
     def __init__(self):
+        self.geo_filepath: Optional[str] = None
         self.df: Optional[geopandas.GeoDataFrame] = None
         self.macbeth_parser: Optional[MacbethParser] = None
-        self.geo_filepath: Optional[str] = None
 
         self.criterion_parameters: Optional[CriterionParameters] = None
 

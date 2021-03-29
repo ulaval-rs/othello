@@ -1,5 +1,6 @@
 from PySide2 import QtWidgets, QtCore
-from PySide2.QtWidgets import QTableWidgetItem
+
+from othello.ui.criterion_wizard import CriterionWizard
 
 
 class AggregateTab(QtWidgets.QWidget):
@@ -8,14 +9,26 @@ class AggregateTab(QtWidgets.QWidget):
         super().__init__()
         self.setObjectName('tab_aggregate')
 
-        self.label_data_section = QtWidgets.QLabel(self)
+        self.label_data_section = QtWidgets.QLabel(self, text='Data')
         self.label_data_section.setGeometry(QtCore.QRect(10, 10, 81, 19))
-        self.label_data_section.setText('Data')
+
+        self.btn_add_criterion = QtWidgets.QPushButton(self, text='Add criterion', clicked=self.add_criterion)
+        self.btn_add_criterion.setGeometry(QtCore.QRect(20, 40, 100, 31))
 
         self.table = QtWidgets.QTableWidget(self)
-        self.table.setGeometry(QtCore.QRect(20, 40, 680, 400))
-        self.table.setRowCount(20)
+        self.table.setGeometry(QtCore.QRect(20, 80, 731, 260))
+        self.table.setRowCount(0)
         self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight (0-1)'])
+        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]'])
 
-        self.table.setItem(0, 0, QTableWidgetItem('test'))
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+
+    def add_criterion(self):
+        wizard = CriterionWizard(self)
+        wizard.show()
+
+        return
