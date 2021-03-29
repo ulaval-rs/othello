@@ -94,6 +94,7 @@ class CriteriaTab(QtWidgets.QWidget):
             layer = self.combobox_layer.currentText()
 
             self.df = gis.io.read(self.geo_filepath, layer=layer)
+            self.combobox_field.clear()
             self.combobox_field.addItems(self.df.columns)
         except DriverError as e:
             popup = Popup(f"Failed to read the file: {e}", self)
@@ -105,6 +106,7 @@ class CriteriaTab(QtWidgets.QWidget):
             return
 
         try:
+            self.combobox_layer.clear()
             self.combobox_layer.addItems(fiona.listlayers(self.geo_filepath))
             self.inline_file_to_add_criteria_filepath.setText(self.geo_filepath)
         except DriverError as e:
