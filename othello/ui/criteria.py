@@ -73,21 +73,21 @@ class CriteriaTab(QtWidgets.QWidget):
         self.set_labels()
 
     def set_labels(self):
-        self.label_data_section.setText('Données')
+        self.label_data_section.setText('Data')
 
-        self.label_file_to_add_criteria.setText('Sélectionner un fichier')
-        self.btn_browse_geo_file.setText('Parcourir')
+        self.label_file_to_add_criteria.setText('Select a file')
+        self.btn_browse_geo_file.setText('Browse')
 
-        self.label_layer_to_select.setText('Couche à transformer')
-        self.label_field_to_select.setText('Champ à transformer')
+        self.label_layer_to_select.setText('Layer to transform')
+        self.label_field_to_select.setText('Field to transform')
 
         self.label_macbeth_section.setText('MacBeth')
-        self.label_macbeth_file_to_select.setText('Sélectionner le fichier M-MACBETH')
-        self.btn_load_macbeth_file.setText('Parcourir')
+        self.label_macbeth_file_to_select.setText('Select M-MACBETH file')
+        self.btn_load_macbeth_file.setText('Browse')
 
-        self.label_macbeth_criterion.setText('Critère à évaluer')
+        self.label_macbeth_criterion.setText('Criterion to evaluate')
 
-        self.btn_add_column_to_file.setText('Ajouter la colonne')
+        self.btn_add_column_to_file.setText('Add column')
 
     def layer_has_been_selected(self):
         try:
@@ -96,7 +96,7 @@ class CriteriaTab(QtWidgets.QWidget):
             self.df = gis.io.read(self.geo_filepath, layer=layer)
             self.combobox_field.addItems(self.df.columns)
         except DriverError as e:
-            popup = Popup(f"Erreur de lecture du fichier : {e}", self)
+            popup = Popup(f"Failed to read the file: {e}", self)
             popup.show()
 
     def browse_geo_file(self):
@@ -108,7 +108,7 @@ class CriteriaTab(QtWidgets.QWidget):
             self.combobox_layer.addItems(fiona.listlayers(self.geo_filepath))
             self.inline_file_to_add_criteria_filepath.setText(self.geo_filepath)
         except DriverError as e:
-            popup = Popup(f"Erreur de lecture du fichier : {e}", self)
+            popup = Popup(f"Failed to read the file: {e}", self)
             popup.show()
 
     def browse_macbeth_file(self):
@@ -123,12 +123,12 @@ class CriteriaTab(QtWidgets.QWidget):
                 [c.name for c in self.macbeth_parser.get_criteria()]
             )
         except (MacbethParserError, configparser.MissingSectionHeaderError) as e:
-            popup = Popup(f"Erreur de lecture du fichier : {e}", self)
+            popup = Popup(f"Failed to read the file: {e}", self)
             popup.show()
 
     def write_file(self):
         if self.df is None:
-            popup = Popup("Aucune donnée n'a été chargée", self)
+            popup = Popup("No data has been loaded", self)
             popup.show()
             return
 

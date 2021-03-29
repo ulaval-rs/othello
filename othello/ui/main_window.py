@@ -31,5 +31,5 @@ class MainWindow(QWidget):
     def set_labels(self, app):
         app.setWindowTitle('Othello')
 
-        self.tabs.setTabText(self.tabs.indexOf(self.tab_criteria_macbeth), 'CriteresMacBeth')
+        self.tabs.setTabText(self.tabs.indexOf(self.tab_criteria_macbeth), 'MacBeth')
         self.tabs.setTabText(self.tabs.indexOf(self.tab_aggregate), 'Aggregate')
