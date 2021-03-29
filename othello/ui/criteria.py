@@ -12,7 +12,7 @@ from othello.macbeth.criterion import Criterion
 from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.errors import MacbethParserError
 from othello.macbeth.parser import MacbethParser
-from othello.ui.echelle_macbeth import MacbethScale
+from othello.ui.macbeth_scale import MacbethScale
 from othello.ui.popup import Popup
 
 
@@ -30,73 +30,53 @@ class CriteriaTab(QtWidgets.QWidget):
         self.setStyleSheet('')
         self.setObjectName('tab_criteria_macbeth')
 
-        self.label_data_section = QtWidgets.QLabel(self)
+        self.label_data_section = QtWidgets.QLabel(self, text='Data')
         self.label_data_section.setGeometry(QtCore.QRect(10, 10, 81, 19))
 
         self.inline_file_to_add_criteria_filepath = QtWidgets.QLineEdit(self, text='')
         self.inline_file_to_add_criteria_filepath.setGeometry(QtCore.QRect(20, 60, 621, 31))
 
-        self.btn_browse_geo_file = QtWidgets.QPushButton(self, clicked=self.browse_geo_file)
+        self.btn_browse_geo_file = QtWidgets.QPushButton(self, text='Browse', clicked=self.browse_geo_file)
         self.btn_browse_geo_file.setGeometry(QtCore.QRect(650, 60, 103, 31))
 
-        self.label_file_to_add_criteria = QtWidgets.QLabel(self)
+        self.label_file_to_add_criteria = QtWidgets.QLabel(self, text='Select a file')
         self.label_file_to_add_criteria.setGeometry(QtCore.QRect(20, 40, 311, 19))
 
-        self.label_layer_to_select = QtWidgets.QLabel(self)
+        self.label_layer_to_select = QtWidgets.QLabel(self, text='Layer to transform')
         self.label_layer_to_select.setGeometry(QtCore.QRect(20, 100, 311, 19))
         self.combobox_layer = QtWidgets.QComboBox(self)
         self.combobox_layer.setGeometry(QtCore.QRect(20, 120, 351, 31))
         self.combobox_layer.activated.connect(self.layer_has_been_selected)
 
-        self.label_field_to_select = QtWidgets.QLabel(self)
+        self.label_field_to_select = QtWidgets.QLabel(self, text='Field to transform')
         self.label_field_to_select.setGeometry(QtCore.QRect(401, 100, 311, 19))
         self.combobox_field = QtWidgets.QComboBox(self)
         self.combobox_field.setGeometry(QtCore.QRect(401, 120, 351, 31))
 
-        self.label_macbeth_section = QtWidgets.QLabel(self)
+        self.label_macbeth_section = QtWidgets.QLabel(self, text='MacBeth')
         self.label_macbeth_section.setGeometry(QtCore.QRect(10, 170, 81, 19))
 
-        self.label_macbeth_file_to_select = QtWidgets.QLabel(self)
+        self.label_macbeth_file_to_select = QtWidgets.QLabel(self, text='Select M-MACBETH file')
         self.label_macbeth_file_to_select.setGeometry(QtCore.QRect(20, 200, 311, 19))
 
         self.inline_macbeth_filepath = QtWidgets.QLineEdit(self)
         self.inline_macbeth_filepath.setGeometry(QtCore.QRect(20, 220, 621, 31))
 
-        self.btn_load_macbeth_file = QtWidgets.QPushButton(self, clicked=self.browse_macbeth_file)
+        self.btn_load_macbeth_file = QtWidgets.QPushButton(self, text='Browse', clicked=self.browse_macbeth_file)
         self.btn_load_macbeth_file.setGeometry(QtCore.QRect(650, 220, 103, 31))
 
-        self.label_macbeth_criterion = QtWidgets.QLabel(self)
+        self.label_macbeth_criterion = QtWidgets.QLabel(self, text='Criterion to evaluate')
         self.label_macbeth_criterion.setGeometry(QtCore.QRect(20, 260, 311, 19))
 
         self.combobox_macbeth_criterion = QtWidgets.QComboBox(self)
         self.combobox_macbeth_criterion.setGeometry(QtCore.QRect(20, 280, 731, 31))
         self.combobox_macbeth_criterion.activated.connect(self.macbeth_criterion_has_been_selected)
 
-        self.btn_add_column_to_file = QtWidgets.QPushButton(self, clicked=self.write_file)
+        self.btn_add_column_to_file = QtWidgets.QPushButton(self, text='Add column', clicked=self.write_file)
         self.btn_add_column_to_file.setGeometry(QtCore.QRect(610, 500, 151, 31))
 
-        self.label_macbeth_scale = QtWidgets.QLabel(text="Macbeth criterion scale")
         self.macbeth_scale = MacbethScale(self)
         self.macbeth_scale.setGeometry(QtCore.QRect(20, 340, 731, 140))
-
-        self.set_labels()
-
-    def set_labels(self):
-        self.label_data_section.setText('Data')
-
-        self.label_file_to_add_criteria.setText('Select a file')
-        self.btn_browse_geo_file.setText('Browse')
-
-        self.label_layer_to_select.setText('Layer to transform')
-        self.label_field_to_select.setText('Field to transform')
-
-        self.label_macbeth_section.setText('MacBeth')
-        self.label_macbeth_file_to_select.setText('Select M-MACBETH file')
-        self.btn_load_macbeth_file.setText('Browse')
-
-        self.label_macbeth_criterion.setText('Criterion to evaluate')
-
-        self.btn_add_column_to_file.setText('Add column')
 
     def layer_has_been_selected(self):
         try:
