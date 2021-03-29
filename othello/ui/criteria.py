@@ -8,9 +8,11 @@ from fiona.errors import DriverError
 from scipy.interpolate import interp1d
 
 from othello import gis
+from othello.macbeth.criterion import Criterion
 from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.errors import MacbethParserError
 from othello.macbeth.parser import MacbethParser
+from othello.ui.echelle_macbeth import MacbethScale
 from othello.ui.popup import Popup
 
 
@@ -20,6 +22,8 @@ class CriteriaTab(QtWidgets.QWidget):
         self.df: Optional[geopandas.GeoDataFrame] = None
         self.macbeth_parser: Optional[MacbethParser] = None
         self.geo_filepath: Optional[str] = None
+
+        self.criterion_parameters: Optional[CriterionParameters] = None
 
         super().__init__()
 
@@ -66,9 +70,14 @@ class CriteriaTab(QtWidgets.QWidget):
 
         self.combobox_macbeth_criterion = QtWidgets.QComboBox(self)
         self.combobox_macbeth_criterion.setGeometry(QtCore.QRect(20, 280, 731, 31))
+        self.combobox_macbeth_criterion.activated.connect(self.macbeth_criterion_has_been_selected)
 
         self.btn_add_column_to_file = QtWidgets.QPushButton(self, clicked=self.write_file)
         self.btn_add_column_to_file.setGeometry(QtCore.QRect(610, 500, 151, 31))
+
+        self.label_macbeth_scale = QtWidgets.QLabel(text="Macbeth criterion scale")
+        self.macbeth_scale = MacbethScale(self)
+        self.macbeth_scale.setGeometry(QtCore.QRect(20, 340, 731, 140))
 
         self.set_labels()
 
@@ -98,6 +107,16 @@ class CriteriaTab(QtWidgets.QWidget):
             self.combobox_field.addItems(self.df.columns)
         except DriverError as e:
             popup = Popup(f"Failed to read the file: {e}", self)
+            popup.show()
+
+    def macbeth_criterion_has_been_selected(self):
+        try:
+            criterion_name = self.combobox_macbeth_criterion.currentText()
+            criterion = self._find_criterion(criterion_name)
+            self.criterion_parameters = self.macbeth_parser.get_criterion_parameters(criterion)
+            self.macbeth_scale.set_values(self.criterion_parameters.levels, self.criterion_parameters.weights)
+        except KeyError as e:
+            popup = Popup(f"Value not found in the macbeth file for this criterion: {e}", self)
             popup.show()
 
     def browse_geo_file(self):
@@ -138,13 +157,10 @@ class CriteriaTab(QtWidgets.QWidget):
         if filepath == '':
             return
 
-        criteria = self.macbeth_parser.get_criteria()
-        criterion_parameters = self.macbeth_parser.get_criterion_parameters(criteria[12])
-
         try:
             self.df['macbeth'] = self._evaluate_new_values(
                 series=self.df[self.combobox_field.currentText()],
-                criterion_parameters=criterion_parameters
+                criterion_parameters=self.criterion_parameters
             )
 
             gis.io.write(self.df, filepath[0])
@@ -158,3 +174,10 @@ class CriteriaTab(QtWidgets.QWidget):
         new_values = f(series.values)
 
         return [round(value, 2) for value in new_values]
+
+    def _find_criterion(self, criterion_name) -> Criterion:
+        for criterion in self.macbeth_parser.get_criteria():
+            if criterion.name == criterion_name:
+                return criterion
+
+        raise ValueError('Criterion not found')
