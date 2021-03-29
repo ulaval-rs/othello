@@ -12,6 +12,7 @@ from othello.macbeth.criterion import Criterion
 from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.errors import MacbethParserError
 from othello.macbeth.parser import MacbethParser
+from othello.macbeth.util import evaluate_new_values
 from othello.ui.macbeth_scale import MacbethScale
 from othello.ui.popup import Popup
 
@@ -92,7 +93,7 @@ class CriteriaTab(QtWidgets.QWidget):
     def macbeth_criterion_has_been_selected(self):
         try:
             criterion_name = self.combobox_macbeth_criterion.currentText()
-            criterion = self._find_criterion(criterion_name)
+            criterion = self.macbeth_parser.find_criterion(criterion_name)
             self.criterion_parameters = self.macbeth_parser.get_criterion_parameters(criterion)
             self.macbeth_scale.set_values(self.criterion_parameters.levels, self.criterion_parameters.weights)
         except KeyError as e:
@@ -138,7 +139,7 @@ class CriteriaTab(QtWidgets.QWidget):
             return
 
         try:
-            self.df['macbeth'] = self._evaluate_new_values(
+            self.df['macbeth'] = evaluate_new_values(
                 series=self.df[self.combobox_field.currentText()],
                 criterion_parameters=self.criterion_parameters
             )
@@ -148,16 +149,4 @@ class CriteriaTab(QtWidgets.QWidget):
             popup = Popup(str(e), self)
             popup.show()
 
-    def _evaluate_new_values(self, series: geopandas.GeoSeries, criterion_parameters: CriterionParameters) -> List:
-        x, y = criterion_parameters.levels, criterion_parameters.weights
-        f = interp1d(x, y, kind='linear')
-        new_values = f(series.values)
 
-        return [round(value, 2) for value in new_values]
-
-    def _find_criterion(self, criterion_name) -> Criterion:
-        for criterion in self.macbeth_parser.get_criteria():
-            if criterion.name == criterion_name:
-                return criterion
-
-        raise ValueError('Criterion not found')

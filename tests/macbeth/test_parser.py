@@ -49,3 +49,21 @@ def test_get_criterion_parameters(parser: MacbethParser, criterion: Criterion):
     assert type(result.levels_orders[0]) == int
     assert type(result.normalized_weights[0]) == float
     assert type(result.weights[0]) == float
+
+
+@pytest.mark.parametrize('criterion_name, expected', [
+    ('Rues partagées', Criterion('Rues partagées', 0, False, True, False)),
+    ('Dimension sécurité', Criterion('Rues partagées', 0, False, True, False)),
+])
+def test_find_criterion(parser: MacbethParser, criterion_name: str, expected: Criterion):
+    result = parser.find_criterion(criterion_name)
+
+    assert result.name == expected.name
+
+
+@pytest.mark.parametrize('criterion_name, expected', [
+    ('NON-EXISTING-CRITERION', ValueError),
+])
+def test_find_criterion(parser: MacbethParser, criterion_name: str, expected):
+    with pytest.raises(expected):
+        parser.find_criterion(criterion_name)

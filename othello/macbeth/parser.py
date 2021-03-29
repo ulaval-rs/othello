@@ -85,3 +85,10 @@ class MacbethParser(ConfigParser):
             normalized_weights=normalized_weights,
             weights=weights,
         )
+
+    def find_criterion(self, criterion_name: str) -> Criterion:
+        for criterion in self.get_criteria():
+            if criterion.name == criterion_name:
+                return criterion
+
+        raise ValueError('Criterion not found')

@@ -1,4 +1,27 @@
-from typing import Union
+from typing import Union, List
+
+import geopandas
+from scipy.interpolate import interp1d
+
+from othello.macbeth.criterion_parameters import CriterionParameters
+
+
+def evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: CriterionParameters) -> List:
+    # If the levels can be used in a interpolation
+    if type(criterion_parameters.levels[0]) in [int, float]:
+        x, y = criterion_parameters.levels, criterion_parameters.weights
+        f = interp1d(x, y, kind='linear')
+        new_values = f(series.values)
+
+        return [round(value, 2) for value in new_values]
+
+    # If the levels are actually string label
+    new_values = []
+    for value in series.values:
+        index_of_level = criterion_parameters.levels.index(value)
+        new_values.append(criterion_parameters.weights[index_of_level])
+
+    return new_values
 
 
 def cast(value: str) -> Union[str, float, int]:
