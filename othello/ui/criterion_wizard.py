@@ -1,3 +1,4 @@
+import copy
 from typing import Optional
 
 import fiona
@@ -81,6 +82,9 @@ class CriterionWizard(QDialog):
         self.parent().table.setItem(new_row_index, 0, QTableWidgetItem(self.get_geo_filepath()))
         self.parent().table.setItem(new_row_index, 1, QTableWidgetItem(self.get_layer()))
         self.parent().table.setItem(new_row_index, 2, QTableWidgetItem(self.get_field()))
+
+        # Adding dataframe to aggregate tab
+        self.parent().dfs.append(copy.deepcopy(self.df))
 
         self.accept()
 

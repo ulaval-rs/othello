@@ -1,14 +1,12 @@
 import configparser
-from typing import Optional, List
+from typing import Optional
 
 import fiona
 import geopandas
 from PySide2 import QtWidgets, QtCore
 from fiona.errors import DriverError
-from scipy.interpolate import interp1d
 
 from othello import gis
-from othello.macbeth.criterion import Criterion
 from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.errors import MacbethParserError
 from othello.macbeth.parser import MacbethParser
@@ -135,7 +133,7 @@ class CriteriaTab(QtWidgets.QWidget):
             return
 
         filepath = QtWidgets.QFileDialog.getSaveFileName(self)
-        if filepath == '':
+        if filepath[0] == '':
             return
 
         try:
