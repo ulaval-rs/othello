@@ -5,6 +5,7 @@ from PySide2 import QtWidgets, QtCore
 
 from othello import gis
 from othello.ui import errors
+from othello.ui.criterion_remover import CriterionRemover
 from othello.ui.criterion_wizard import CriterionWizard
 from othello.ui.popup import Popup
 
@@ -22,6 +23,9 @@ class AggregateTab(QtWidgets.QWidget):
 
         self.btn_add_criterion = QtWidgets.QPushButton(self, text='Add criterion', clicked=self.add_criterion)
         self.btn_add_criterion.setGeometry(QtCore.QRect(20, 40, 100, 31))
+
+        self.btn_remove_criterion = QtWidgets.QPushButton(self, text='Remove criterion', clicked=self.remove_criterion)
+        self.btn_remove_criterion.setGeometry(QtCore.QRect(130, 40, 120, 31))
 
         self.table = QtWidgets.QTableWidget(self)
         self.table.setGeometry(QtCore.QRect(20, 80, 731, 260))
@@ -59,7 +63,7 @@ class AggregateTab(QtWidgets.QWidget):
                 return
 
             del self.dfs  # Saving memory space
-            df = self._add_weighted_columns(df)
+            df = self.add_weighted_columns(df)
             gis.io.write(df, filepath[0])
 
         except errors.LessThenTwoCriteriaError:
@@ -117,12 +121,12 @@ class AggregateTab(QtWidgets.QWidget):
         weights = []
 
         for row_index in range(self.table.rowCount()):
-                weights.append(float(self.table.item(row_index, 4).text()))
+            weights.append(float(self.table.item(row_index, 4).text()))
 
         if round(sum(weights), 2) != 1.0:
             raise errors.SumOfWeightNotEqualsToOneError
 
-    def _add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
+    def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
         for row_index in range(self.table.rowCount()):
             filepath = self.table.item(row_index, 0).text()
             layer = self.table.item(row_index, 1).text()
@@ -135,3 +139,12 @@ class AggregateTab(QtWidgets.QWidget):
             df[criterion_name + '_p'] = weight * criterion_geoseries
 
         return df
+
+    def remove_criterion(self):
+        if self.table.rowCount() == 0:
+            popup = Popup('No criterion to remove', self)
+            popup.show()
+            return
+
+        criterion_remover = CriterionRemover(self)
+        criterion_remover.show()
