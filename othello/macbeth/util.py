@@ -1,7 +1,7 @@
 from typing import Union, List
 
 import geopandas
-from scipy.interpolate import interp1d
+from numpy import interp
 
 from othello.macbeth.criterion_parameters import CriterionParameters
 
@@ -10,8 +10,7 @@ def evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: Crite
     # If the levels can be used in a interpolation
     if type(criterion_parameters.levels[0]) in [int, float]:
         x, y = criterion_parameters.levels, criterion_parameters.weights
-        f = interp1d(x, y, kind='linear')
-        new_values = f(series.values)
+        new_values = interp(series.values, x, y)
 
         return [round(value, 2) for value in new_values]
 

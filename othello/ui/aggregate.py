@@ -28,7 +28,7 @@ class AggregateTab(QtWidgets.QWidget):
         self.btn_remove_criterion.setGeometry(QtCore.QRect(130, 40, 120, 31))
 
         self.table = QtWidgets.QTableWidget(self)
-        self.table.setGeometry(QtCore.QRect(20, 80, 731, 260))
+        self.table.setGeometry(QtCore.QRect(20, 80, 731, 400))
         self.table.setRowCount(0)
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'New Name', 'Weight [0-1]'])
