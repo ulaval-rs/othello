@@ -20,6 +20,8 @@ class CriteriaTab(QtWidgets.QWidget):
     def __init__(self):
         self.geo_filepath: Optional[str] = None
         self.df: Optional[geopandas.GeoDataFrame] = None
+        self.layer: Optional[str] = None
+
         self.macbeth_parser: Optional[MacbethParser] = None
 
         self.criterion_parameters: Optional[CriterionParameters] = None
@@ -79,9 +81,9 @@ class CriteriaTab(QtWidgets.QWidget):
 
     def layer_has_been_selected(self):
         try:
-            layer = self.combobox_layer.currentText()
+            self.layer = self.combobox_layer.currentText()
 
-            self.df = gis.io.read(self.geo_filepath, layer=layer)
+            self.df = gis.io.read(self.geo_filepath, layer=self.layer)
             self.combobox_field.clear()
             self.combobox_field.addItems(self.df.columns)
         except DriverError as e:
@@ -132,17 +134,17 @@ class CriteriaTab(QtWidgets.QWidget):
             popup.show()
             return
 
-        filepath = QtWidgets.QFileDialog.getSaveFileName(self)
-        if filepath[0] == '':
-            return
-
         try:
             self.df['macbeth'] = evaluate_new_values(
                 series=self.df[self.combobox_field.currentText()],
                 criterion_parameters=self.criterion_parameters
             )
 
-            gis.io.write(self.df, filepath[0])
+            gis.io.write(self.df, self.geo_filepath, layer=self.layer + '_mb')
+
+            popup = Popup("Done", self)
+            popup.show()
+
         except Exception as e:
             popup = Popup(str(e), self)
             popup.show()

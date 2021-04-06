@@ -14,9 +14,16 @@ def read(filepath: str, layer: Optional[str] = None) -> geopandas.GeoDataFrame:
     return geopandas.read_file(filepath)
 
 
-def write(df: geopandas.GeoDataFrame, filepath: str) -> None:
+def write(df: geopandas.GeoDataFrame, filepath: str, layer: Optional[str] = None) -> None:
     if '.gdb' in filepath.lower():
-        df.to_file(filepath, driver='FileGDB')
+        if layer is not None:
+            df.to_file(filepath, driver='FileGDB', layer=layer)
+
+        else:
+            df.to_file(filepath, driver='FileGDB')
 
     else:
-        df.to_file(filepath)
+        if layer is not None:
+            df.to_file(filepath, layer=layer)
+        else:
+            df.to_file(filepath)
