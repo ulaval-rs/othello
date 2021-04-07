@@ -9,6 +9,9 @@
 !licenses/
 !licenses/**
 
+!scripts/
+!scripts/**
+
 !othello/
 !othello/**
 

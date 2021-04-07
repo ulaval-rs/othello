@@ -2,6 +2,8 @@ import os
 import shutil
 from distutils.command.build import build
 
+from othello.version import VERSION
+
 
 class CleanBuild(build):
 
@@ -15,8 +17,12 @@ class CleanBuild(build):
             shutil.rmtree(os.path.join(project_lib_path, 'PySide2', 'examples'))
             shutil.rmtree(os.path.join(project_lib_path, 'PySide2', 'glue'))
             shutil.rmtree(os.path.join(project_lib_path, 'PySide2', 'qml'))
-            shutil.rmtree(os.path.join(project_lib_path, 'PySide2', 'plugins'))
             shutil.rmtree(os.path.join(project_lib_path, 'PySide2', 'translations'))
             os.remove(os.path.join(project_lib_path, 'PySide2', 'Qt5WebEngineCore.dll'))
 
+        # Renaming directory
+        for build_dir in os.listdir('build'):
+            old_name = os.path.join('build', build_dir)
+            new_name = os.path.join('build', f'othello-{VERSION}-' + build_dir.split('.', 1)[1])
+            os.rename(old_name, new_name)
 
