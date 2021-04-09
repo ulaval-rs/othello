@@ -9,7 +9,7 @@ from othello.macbeth.util import cast
 class MacbethParser(ConfigParser):
 
     def __init__(self, filepath: str, encoding=None) -> None:
-        super().__init__()
+        super().__init__(interpolation=None)
         self.read(filepath, encoding)
 
     def get_criteria(self) -> List[Criterion]:
@@ -36,7 +36,8 @@ class MacbethParser(ConfigParser):
                 )
             )
 
-        return criteria
+        # Only criteria with fundamental=1 are actual criteria
+        return [c for c in criteria if c.fundamental == 1]
 
     def get_criterion_parameters(self, criterion: Criterion) -> CriterionParameters:
         """

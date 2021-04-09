@@ -13,7 +13,7 @@ def make_criterion_parameters():
     parser = MacbethParser(MACBETH_FILEPATH)
     criteria = parser.get_criteria()
 
-    return parser.get_criterion_parameters(criteria[12])
+    return parser.get_criterion_parameters(criteria[7])
 
 
 @pytest.mark.parametrize('series, criterion_parameters', [

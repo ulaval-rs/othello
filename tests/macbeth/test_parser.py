@@ -22,21 +22,21 @@ def criterion(parser):
 def test_get_criteria(parser: MacbethParser):
     result = parser.get_criteria()
 
-    assert len(result) == 14
+    assert len(result) == 9
     assert type(result[0]) == Criterion
-    assert result[0].name == 'Rues partagées'
-    assert result[0].parent_index == 0
-    assert not result[0].fundamental
+    assert result[0].name == 'Connectivité'
+    assert result[0].parent_index == 2
+    assert result[0].fundamental
     assert not result[0].fundamental_group
-    assert result[0].expanded
+    assert not result[0].expanded
 
 
 def test_get_criterion_parameters(parser: MacbethParser, criterion: Criterion):
     result = parser.get_criterion_parameters(criterion)
 
     assert type(result) == CriterionParameters
-    assert result.short_name == 'Noeud racine'
-    assert result.nbr_of_levels == 10
+    assert result.short_name == 'Connectivite'
+    assert result.nbr_of_levels == 7
 
     assert type(result.levels) == list
     assert type(result.levels_short) == list
