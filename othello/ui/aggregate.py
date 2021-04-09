@@ -109,6 +109,8 @@ class AggregateTab(QtWidgets.QWidget):
             raise errors.SumOfWeightNotEqualsToOneError
 
     def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
+        weighted_columns = []
+
         for row_index in range(self.table.rowCount()):
             filepath = self.table.item(row_index, 0).text()
             layer = self.table.item(row_index, 1).text()
@@ -118,6 +120,12 @@ class AggregateTab(QtWidgets.QWidget):
             criterion_geoseries = gis.io.read(filepath, layer=layer)[criterion]
             df[criterion + '_np'] = criterion_geoseries
             df[criterion + '_p'] = weight * criterion_geoseries
+            weighted_columns.append(criterion + '_p')
+
+        # Final score in a new series
+        df['FinalScore'] = [0 for i in range(len(df))]
+        for column in weighted_columns:
+            df['FinalScore'] += df[column]
 
         return df
 

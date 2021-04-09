@@ -46,7 +46,7 @@ setup(
     version='0.1',
     description='Tools that allow you to read and manipulate M-MACBETH files and transform GIS data accordingly.',
     options={'build_exe': build_exe_options},
-    executables=[Executable('othello/othello.py', base=base)],
+    executables=[Executable('othello/app.py', base=base)],
     cmdclass={
         'clean_build': CleanBuild,
     }
