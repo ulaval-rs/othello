@@ -67,3 +67,12 @@ def test_find_criterion(parser: MacbethParser, criterion_name: str, expected: Cr
 def test_find_criterion(parser: MacbethParser, criterion_name: str, expected):
     with pytest.raises(expected):
         parser.find_criterion(criterion_name)
+
+
+def test_get_weights(parser: MacbethParser):
+    result = parser.get_weights()
+
+    assert type(result) == dict
+    assert result['Connectivité'] == round(6.92 / 100, 4)
+    assert result['Visibilité'] == round(10.77 / 100, 4)
+    assert result['Indice canopée'] == round(8.46 / 100, 4)

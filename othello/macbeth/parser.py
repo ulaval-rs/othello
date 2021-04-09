@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from typing import List
+from typing import List, Dict
 
 from othello.macbeth.criterion_parameters import CriterionParameters
 from othello.macbeth.criterion import Criterion
@@ -9,6 +9,8 @@ from othello.macbeth.util import cast
 class MacbethParser(ConfigParser):
 
     def __init__(self, filepath: str, encoding=None) -> None:
+        self.filepath = filepath
+
         super().__init__(interpolation=None)
         self.read(filepath, encoding)
 
@@ -93,3 +95,18 @@ class MacbethParser(ConfigParser):
                 return criterion
 
         raise ValueError('Criterion not found')
+
+    def get_weights(self) -> Dict[str, float]:
+        """The first criterion correspond to the weights"""
+        criteria_section = self['Liste criteres']
+        criterion = Criterion(
+            name=criteria_section['Nom1'],
+            parent_index=int(criteria_section['Index parent1']),
+            fundamental=bool(int(criteria_section['Fondamental1'])),
+            fundamental_group=bool(int(criteria_section['GroupeFondamental1'])),
+            expanded=bool(int(criteria_section['Expanded1']))
+        )
+
+        parameters = self.get_criterion_parameters(criterion)
+
+        return {criterion_name: round(weight / 100, 4) for criterion_name, weight in zip(parameters.levels, parameters.weights)}

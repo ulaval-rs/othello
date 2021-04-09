@@ -17,12 +17,12 @@ from othello.ui.popup import Popup
 
 class CriteriaTab(QtWidgets.QWidget):
 
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
+
         self.geo_filepath: Optional[str] = None
         self.df: Optional[geopandas.GeoDataFrame] = None
         self.layer: Optional[str] = None
-
-        self.macbeth_parser: Optional[MacbethParser] = None
 
         self.criterion_parameters: Optional[CriterionParameters] = None
 
@@ -93,8 +93,8 @@ class CriteriaTab(QtWidgets.QWidget):
     def macbeth_criterion_has_been_selected(self):
         try:
             criterion_name = self.combobox_macbeth_criterion.currentText()
-            criterion = self.macbeth_parser.find_criterion(criterion_name)
-            self.criterion_parameters = self.macbeth_parser.get_criterion_parameters(criterion)
+            criterion = self.parent.macbeth_parser.find_criterion(criterion_name)
+            self.criterion_parameters = self.parent.macbeth_parser.get_criterion_parameters(criterion)
             self.macbeth_scale.set_values(self.criterion_parameters.levels, self.criterion_parameters.weights)
         except KeyError as e:
             popup = Popup(f"Value not found in the macbeth file for this criterion: {e}", self)
@@ -119,11 +119,11 @@ class CriteriaTab(QtWidgets.QWidget):
             return
 
         try:
-            self.macbeth_parser = MacbethParser(filepath)
+            self.parent.macbeth_parser = MacbethParser(filepath)
             self.inline_macbeth_filepath.setText(filepath)
             self.combobox_macbeth_criterion.clear()
             self.combobox_macbeth_criterion.addItems(
-                [c.name for c in self.macbeth_parser.get_criteria()]
+                [c.name for c in self.parent.macbeth_parser.get_criteria()]
             )
         except (MacbethParserError, configparser.MissingSectionHeaderError) as e:
             popup = Popup(f"Failed to read the file: {e}", self)

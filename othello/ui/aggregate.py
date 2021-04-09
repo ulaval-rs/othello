@@ -12,8 +12,11 @@ from othello.ui.popup import Popup
 
 class AggregateTab(QtWidgets.QWidget):
 
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
+
         super().__init__()
+
         self.setObjectName('tab_aggregate')
 
         self.dfs = []
@@ -30,28 +33,25 @@ class AggregateTab(QtWidgets.QWidget):
         self.table = QtWidgets.QTableWidget(self)
         self.table.setGeometry(QtCore.QRect(20, 80, 731, 400))
         self.table.setRowCount(0)
-        self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'New Name', 'Weight [0-1]'])
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]'])
 
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-        header.setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
 
         self.btn_aggregate = QtWidgets.QPushButton(self, text='Aggregate to new file', clicked=self.aggregate)
         self.btn_aggregate.setGeometry(QtCore.QRect(610, 500, 151, 31))
 
     def add_criterion(self):
-        wizard = CriterionWizard(self)
+        wizard = CriterionWizard(self, choose_macbeth_file=self.parent.macbeth_parser is None)
         wizard.show()
 
     def aggregate(self):
         try:
             self.assert_presence_of_at_least_2_criteria()
-            self.assert_no_empty_new_criterion_names()
-            self.assert_no_duplicate_in_mew_criterion_names()
             self.assert_weights_are_float()
             self.assert_weights_are_normalized()
 
@@ -90,28 +90,10 @@ class AggregateTab(QtWidgets.QWidget):
         if len(self.dfs) < 2:
             raise errors.LessThenTwoCriteriaError
 
-    def assert_no_empty_new_criterion_names(self):
-        for row_index in range(self.table.rowCount()):
-            try:
-                # An error is raised when no text have been entered
-                self.table.item(row_index, 3).text()
-            except AttributeError:
-                raise errors.EmptyNewCriterionNameError
-
-    def assert_no_duplicate_in_mew_criterion_names(self):
-        criteria = []
-        for row_index in range(self.table.rowCount()):
-            criterion = self.table.item(row_index, 3).text()
-
-            if criterion in criteria:
-                raise errors.DuplicateNewCriterionNamesError
-
-            criteria.append(criterion)
-
     def assert_weights_are_float(self):
         for row_index in range(self.table.rowCount()):
             try:
-                weight = self.table.item(row_index, 4).text()
+                weight = self.table.item(row_index, 3).text()
                 float(weight)
 
             except (ValueError, AttributeError):
@@ -121,7 +103,7 @@ class AggregateTab(QtWidgets.QWidget):
         weights = []
 
         for row_index in range(self.table.rowCount()):
-            weights.append(float(self.table.item(row_index, 4).text()))
+            weights.append(float(self.table.item(row_index, 3).text()))
 
         if round(sum(weights), 2) != 1.0:
             raise errors.SumOfWeightNotEqualsToOneError
@@ -131,12 +113,11 @@ class AggregateTab(QtWidgets.QWidget):
             filepath = self.table.item(row_index, 0).text()
             layer = self.table.item(row_index, 1).text()
             criterion = self.table.item(row_index, 2).text()
-            criterion_name = self.table.item(row_index, 3).text()
-            weight = float(self.table.item(row_index, 4).text())
+            weight = float(self.table.item(row_index, 3).text())
 
             criterion_geoseries = gis.io.read(filepath, layer=layer)[criterion]
-            df[criterion_name + '_np'] = criterion_geoseries
-            df[criterion_name + '_p'] = weight * criterion_geoseries
+            df[criterion + '_np'] = criterion_geoseries
+            df[criterion + '_p'] = weight * criterion_geoseries
 
         return df
 
