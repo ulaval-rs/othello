@@ -121,6 +121,7 @@ class CriteriaTab(QtWidgets.QWidget):
         try:
             self.macbeth_parser = MacbethParser(filepath)
             self.inline_macbeth_filepath.setText(filepath)
+            self.combobox_macbeth_criterion.clear()
             self.combobox_macbeth_criterion.addItems(
                 [c.name for c in self.macbeth_parser.get_criteria()]
             )
