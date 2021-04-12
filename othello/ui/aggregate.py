@@ -66,6 +66,9 @@ class AggregateTab(QtWidgets.QWidget):
             df = self.add_weighted_columns(df)
             gis.io.write(df, filepath[0])
 
+            popup = Popup("Done", self)
+            popup.show()
+
         except errors.LessThenTwoCriteriaError:
             popup = Popup("At least 2 criteria must be loaded", self)
             popup.show()
@@ -116,6 +119,9 @@ class AggregateTab(QtWidgets.QWidget):
             layer = self.table.item(row_index, 1).text()
             criterion = self.table.item(row_index, 2).text()
             weight = float(self.table.item(row_index, 3).text())
+
+            # Removing the _mb suffix
+            criterion = criterion.replace('_mb', '')
 
             criterion_geoseries = gis.io.read(filepath, layer=layer)[criterion]
             df[criterion + '_np'] = criterion_geoseries

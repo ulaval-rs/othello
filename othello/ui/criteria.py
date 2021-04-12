@@ -136,12 +136,12 @@ class CriteriaTab(QtWidgets.QWidget):
             return
 
         try:
-            self.df['macbeth'] = evaluate_new_values(
+            self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
                 series=self.df[self.combobox_field.currentText()],
                 criterion_parameters=self.criterion_parameters
             )
 
-            gis.io.write(self.df, self.geo_filepath, layer=self.layer + '_mb')
+            gis.io.write(self.df, self.geo_filepath, layer=self.layer)
 
             popup = Popup("Done", self)
             popup.show()
