@@ -64,7 +64,7 @@ class AggregateTab(QtWidgets.QWidget):
 
             del self.dfs  # Saving memory space
             df = self.add_weighted_columns(df)
-            gis.io.write(df, filepath[0])
+            gis.io.write(df, filepath[0], layer='FinalLayer')
 
             popup = Popup("Done", self)
             popup.show()
