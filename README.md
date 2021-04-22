@@ -6,11 +6,11 @@ __Project status : in development__
 ## Usage
 
 ### Evaluate criteria
-<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/criteria_workflow.png" alt="criteria workflow" width="60%">
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/criteria_workflow.png" alt="criteria workflow" width="100%">
 
 
 ### Aggregate values
-<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/aggregate_workflow.png" alt="aggregate workflow" width="60%">
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/aggregate_workflow.png" alt="aggregate workflow" width="100%">
 
 
 ## Installation (*only working on Windows*)
