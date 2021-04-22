@@ -4,13 +4,21 @@ Tools that allow you to read and manipulate M-MACBETH files and transform GIS da
 __Project status : in development__
 
 ## Usage
+Othello has 2 tools.
+The first, `Criteria`, allows to transform the values of a criterion thanks to a scale present in a macbeth file.
+The second, `Aggregate`, allows you to aggregate all these values in order to calculate an optimization score.
 
-### Evaluate criteria
-<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/criteria_workflow.png" alt="criteria workflow" width="100%">
+### Criteria
+
+
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/criteria_workflow.png" alt="Criteria workflow" width="100%">
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/images/criteria_tool.png" alt="Criteria tool" width="50%">
 
 
 ### Aggregate values
-<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/aggregate_workflow.png" alt="aggregate workflow" width="100%">
+
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/aggregate_workflow.png" alt="Aggregate workflow" width="100%">
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/images/aggregate_tool.png" alt="Aggregate tool" width="100%">
 
 
 ## Installation (*only working on Windows*)
