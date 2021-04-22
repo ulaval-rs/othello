@@ -1,7 +1,25 @@
 # Othello
 Tools that allow you to read and manipulate M-MACBETH files and transform GIS data accordingly.
 
+__Project status : in development__
+
+## Usage
+
+### Evaluate criteria
+<img src="https://https://github.com/ulaval-rs/othello/tree/main/docs/diagrams/criteria_workflow.png" alt="criteria workflow" width="60%">
+
+
+### Aggregate values
+<img src="https://https://github.com/ulaval-rs/othello/tree/main/docs/diagrams/aggregate_workflow.png" alt="aggregate workflow" width="60%">
+
+
 ## Installation (*only working on Windows*)
+### Install from release (preferred)
+1. Find the most recent release here : [https://github.com/ulaval-rs/othello/releases](https://github.com/ulaval-rs/othello/releases)
+2. In the assets, download the othello zip file
+3. Unzip the zip file at the path where you want the application
+4. Run `app.exe` to start the application
+
 ### Install from source
 Clone the repo:
 ```bash

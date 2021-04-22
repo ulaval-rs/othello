@@ -12,6 +12,9 @@
 !scripts/
 !scripts/**
 
+!docs/
+!docs/**
+
 !othello/
 !othello/**
 
