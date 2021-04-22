@@ -12,13 +12,13 @@ The second, `Aggregate`, allows you to aggregate all these values in order to ca
 
 
 <img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/criteria_workflow.png" alt="Criteria workflow" width="100%">
-<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/images/criteria_tool.png" alt="Criteria tool" width="50%">
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/images/criteria_tool.png" alt="Criteria tool" width="80%">
 
 
 ### Aggregate values
 
 <img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/diagrams/aggregate_workflow.png" alt="Aggregate workflow" width="100%">
-<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/images/aggregate_tool.png" alt="Aggregate tool" width="100%">
+<img src="https://raw.githubusercontent.com/ulaval-rs/othello/main/docs/images/aggregate_tool.png" alt="Aggregate tool" width="80%">
 
 
 ## Installation (*only working on Windows*)
