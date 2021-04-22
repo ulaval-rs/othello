@@ -39,7 +39,7 @@ class CriterionWizard(QDialog):
         self.combobox_layer.setGeometry(QtCore.QRect(20, 120, 351, 31))
         self.combobox_layer.activated.connect(self.layer_has_been_selected)
 
-        self.label_field_to_select = QtWidgets.QLabel(self, text='Field to transform')
+        self.label_field_to_select = QtWidgets.QLabel(self, text='Criteria')
         self.label_field_to_select.setGeometry(QtCore.QRect(401, 100, 311, 19))
         self.combobox_field = QtWidgets.QComboBox(self)
         self.combobox_field.setGeometry(QtCore.QRect(401, 120, 351, 31))

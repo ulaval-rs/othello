@@ -61,20 +61,24 @@ class AggregateTab(QtWidgets.QWidget):
             filepath = QtWidgets.QFileDialog.getSaveFileName(self)
             if filepath[0] == '':
                 return
+            if '.gdb' not in filepath[0].lower():
+                popup = Popup('Only .gdb files are supported.', self)
+                popup.show()
+                return
 
             del self.dfs  # Saving memory space
             df = self.add_weighted_columns(df)
             gis.io.write(df, filepath[0], layer='FinalLayer')
 
-            popup = Popup("Done", self)
+            popup = Popup(f'The file "{filepath[0]}" have been written.', self)
             popup.show()
 
         except errors.LessThenTwoCriteriaError:
-            popup = Popup("At least 2 criteria must be loaded", self)
+            popup = Popup('At least 2 criteria must be loaded', self)
             popup.show()
 
         except (errors.EmptyNewCriterionNameError, errors.DuplicateNewCriterionNamesError):
-            popup = Popup("All criteria must have new criterion name and be different", self)
+            popup = Popup('All criteria must have new criterion name and be different', self)
             popup.show()
 
         except errors.WeightIsNotAFloatError:
@@ -129,7 +133,7 @@ class AggregateTab(QtWidgets.QWidget):
             weighted_columns.append(criterion + '_p')
 
         # Final score in a new series
-        df['FinalScore'] = [0 for i in range(len(df))]
+        df['FinalScore'] = [0 for _ in range(len(df))]
         for column in weighted_columns:
             df['FinalScore'] += df[column]
 
