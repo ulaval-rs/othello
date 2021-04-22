@@ -24,6 +24,7 @@ def test_evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: 
 
     assert type(result) == list
     assert len(result) == len(series)
+    assert result[0] == -46.67  # Expected value of the first element in the test data
 
 
 @pytest.mark.parametrize('value, expected_value, expected_type', [

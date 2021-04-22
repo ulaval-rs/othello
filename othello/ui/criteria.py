@@ -143,7 +143,7 @@ class CriteriaTab(QtWidgets.QWidget):
 
             gis.io.write(self.df, self.geo_filepath, layer=self.layer)
 
-            popup = Popup("Done", self)
+            popup = Popup(f'New values have been added to the "{self.combobox_field.currentText()}_mb" column.', self)
             popup.show()
 
         except Exception as e:

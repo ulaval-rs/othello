@@ -21,7 +21,7 @@ class TestRead:
 
     @pytest.mark.parametrize('filepath, layer, expected_nbr_of_columns', [
         (GDB_FILEPATH, None, 34),
-        (GDB_FILEPATH, 'ArretsTEST_on_mb', 35),
+        (GDB_FILEPATH, 'ArretsTEST_on_mb', 36),
         (SPH_FILEPATH, None, 5),
     ])
     def test_read(self, filepath, layer, expected_nbr_of_columns):

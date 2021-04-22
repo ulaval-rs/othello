@@ -1,7 +1,7 @@
 from typing import Union, List
 
 import geopandas
-from numpy import interp
+import numpy
 
 from othello.macbeth.criterion_parameters import CriterionParameters
 
@@ -9,8 +9,12 @@ from othello.macbeth.criterion_parameters import CriterionParameters
 def evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: CriterionParameters) -> List:
     # If the levels can be used in a interpolation
     if type(criterion_parameters.levels[0]) in [int, float]:
-        x, y = criterion_parameters.levels, criterion_parameters.weights
-        new_values = interp(series.values, x, y)
+        x, y = numpy.array(criterion_parameters.levels), numpy.array(criterion_parameters.weights)
+        # x must be sort in order to work with the interp function
+        sorted_indexes = numpy.argsort(x)
+        x, y = x[sorted_indexes], y[sorted_indexes]
+
+        new_values = numpy.interp(series.values, x, y)
 
         return [round(value, 2) for value in new_values]
 
