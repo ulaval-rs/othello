@@ -65,7 +65,7 @@ class AggregateTab(QtWidgets.QWidget):
         try:
             self.assert_presence_of_at_least_2_criteria()
             self.assert_weights_are_float()
-            # self.assert_weights_are_normalized()
+            self.assert_weights_are_normalized()
 
             common_columns = functools.reduce(lambda c1, c2: set(c1).intersection(set(c2)), self.dfs)
             df = copy.deepcopy(self.dfs[0][common_columns])
