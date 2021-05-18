@@ -20,7 +20,7 @@ class TestRead:
         shutil.rmtree(TMP_DIR)
 
     @pytest.mark.parametrize('filepath, layer, expected_nbr_of_columns', [
-        (GDB_FILEPATH, None, 34),
+        (GDB_FILEPATH, None, 35),
         (GDB_FILEPATH, 'ArretsTEST_on_mb', 36),
         (SPH_FILEPATH, None, 5),
     ])

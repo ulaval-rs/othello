@@ -1,3 +1,4 @@
+import copy
 import functools
 
 import geopandas
@@ -42,35 +43,49 @@ class AggregateTab(QtWidgets.QWidget):
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
 
-        self.btn_aggregate = QtWidgets.QPushButton(self, text='Aggregate to new file', clicked=self.aggregate)
-        self.btn_aggregate.setGeometry(QtCore.QRect(610, 500, 151, 31))
+        self.btn_aggregate_existing_file = QtWidgets.QPushButton(
+            self,
+            text='Aggregate to existing file',
+            clicked=lambda: self.aggregate(to_new_file=False)
+        )
+        self.btn_aggregate_existing_file.setGeometry(QtCore.QRect(450, 500, 151, 31))
+
+        self.btn_aggregate_new_file = QtWidgets.QPushButton(
+            self,
+            text='Aggregate to new file',
+            clicked=lambda: self.aggregate(to_new_file=True)
+        )
+        self.btn_aggregate_new_file.setGeometry(QtCore.QRect(610, 500, 151, 31))
 
     def add_criterion(self):
         wizard = CriterionWizard(self, choose_macbeth_file=self.parent.macbeth_parser is None)
         wizard.show()
 
-    def aggregate(self):
+    def aggregate(self, to_new_file: bool):
         try:
             self.assert_presence_of_at_least_2_criteria()
             self.assert_weights_are_float()
             self.assert_weights_are_normalized()
 
             common_columns = functools.reduce(lambda c1, c2: set(c1).intersection(set(c2)), self.dfs)
-            df = self.dfs[0][common_columns]
+            df = copy.deepcopy(self.dfs[0][common_columns])
 
-            filepath = QtWidgets.QFileDialog.getSaveFileName(self)
-            if filepath[0] == '':
+            if to_new_file:
+                filepath = QtWidgets.QFileDialog.getSaveFileName(self)[0]
+            else:
+                filepath = QtWidgets.QFileDialog.getExistingDirectory(self)
+
+            if filepath == '':
                 return
-            if '.gdb' not in filepath[0].lower():
+            if '.gdb' not in filepath.lower():
                 popup = Popup('Only .gdb files are supported.', self)
                 popup.show()
                 return
 
-            del self.dfs  # Saving memory space
             df = self.add_weighted_columns(df)
-            gis.io.write(df, filepath[0], layer='FinalLayer')
+            gis.io.write(df, filepath, layer='FinalLayer')
 
-            popup = Popup(f'The file "{filepath[0]}" have been written.', self)
+            popup = Popup(f'The file "{filepath}" have been written.', self)
             popup.show()
 
         except errors.LessThenTwoCriteriaError:
