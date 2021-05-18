@@ -25,4 +25,3 @@ class CleanBuild(build):
             old_name = os.path.join('build', build_dir)
             new_name = os.path.join('build', f'othello-{VERSION}-' + build_dir.split('.', 1)[1])
             os.rename(old_name, new_name)
-
