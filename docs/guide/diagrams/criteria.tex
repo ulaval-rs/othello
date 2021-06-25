@@ -4,20 +4,20 @@
         \begin{tabular}{c|c|c|c|c}
             Index  & ... & columnX & ... & columnX\_mb \\
             \hline
-            1 & ... & x_1 & ... & x_{mb1} \\
-            2 & ... & x_2 & ... & x_{mb2} \\
-            3 & ... & x_3 & ... & x_{mb3} \\
-            ... & ... & ... & ... & ... \\
+            1 & ... & $x_1$ & ... & $x_{mb1}$ \\
+            2 & ... & $x_2$ & ... & $x_{mb2}$ \\
+            3 & ... & $x_3$ & ... & $x_{mb3}$ \\
+            ... & ... & ... & ... & ...
         \end{tabular}
     };
-    \node [left=of tab1,xshift=-1.5cm,yshift=-3.4cm] (tab2) {%
+    \node [left,xshift=-1.5cm,yshift=-3.4cm] (tab2) {%
         \begin{tabular}{c|c|c|c}
             Index  & ... & columnY1 & columnY2 \\
             \hline
-            1 & ... & y_{11} & y_{21} \\
-            2 & ... & y_{12} & y_{22} \\
-            3 & ... & y_{13} & y_{23} \\
-            ... & ... & ... & ... \\
+            1 & ... & $y_{11}$ & $y_{21}$ \\
+            2 & ... & $y_{12}$ & $y_{22}$ \\
+            3 & ... & $y_{13}$ & $y_{23}$ \\
+            ... & ... & ... & ...
         \end{tabular}
     };
 
@@ -29,37 +29,37 @@
     \node [
         rectangle,
         draw=blue,
-        right=of tab2,
+        right,
         xshift=-1.45cm,
         minimum width=1.7cm,
         minimum height=2.5cm,
-    ] (rec-x);
+    ] (rec-x) {};
     \node [
         rectangle,
         draw=red,
-        right=of tab2,
+        right,
         xshift=-5.7cm,
         yshift=-3.4cm,
         minimum width=1.8cm,
         minimum height=2.5cm,
-    ] (rec-y1);
+    ] (rec-y1) {};
     \node [
         rectangle,
         draw=red,
-        right=of tab2,
+        right,
         xshift=-3.6cm,
         yshift=-3.4cm,
         minimum width=1.8cm,
         minimum height=2.5cm,
-    ] (rec-y2);
+    ] (rec-y2) {};
     \node [
         rectangle,
         draw=green,
-        right=of tab2,
+        right,
         xshift=1.2cm,
         minimum width=2.3cm,
         minimum height=2.5cm,
-    ] (rec-mb);
+    ] (rec-mb) {};
     \node [
         draw,
         rectangle,
