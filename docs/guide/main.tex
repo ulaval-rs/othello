@@ -1,0 +1,66 @@
+%! Author = gacou54
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\usepackage{xcolor}
+
+
+% Document information
+\title{Othello User Guide}
+\author{Gabriel Couture}
+\setcounter{tocdepth}{2}
+
+% Document
+\begin{document}
+
+    \maketitle
+    \tableofcontents
+    \newpage
+
+
+    \section{Introduction}\label{sec:introduction}
+    Othello is a tool that allows you to link optimization data from Macbeth software
+    and geographic data in GDB format (ArcGIS proprietary format).
+    It consists of two tools: the first being \textit{Criteria}, and the second \textit{Aggregate}.
+
+    \subsection{\textit{Criteria}}\label{subsec:criteria}
+    The \textit{Criteria} allows to transform the values of a criterion thanks
+    to a scale present in a macbeth file. 
+
+    \begin{figure}[h]
+        \centering
+        \input{diagrams/criteria.tex}
+        \caption{Criteria tool data flow diagram}
+        \label{fig:criteria-tool}
+    \end{figure}
+
+    \subsection{\textit{Aggregate}}\label{subsec:aggregate}
+
+
+    \section{Installation}\label{sec:installation}
+
+    \subsection{Install from release (preferred)}\label{subsec:install-from-release-(preferred)}
+    \begin{enumerate}
+        \item Find the most recent release here: \url{https://github.com/ulaval-rs/othello/releases}
+        \item In the assets, download the othello zip file
+        \item Unzip the zip file at the path where you want the application
+        \item Run \texttt{app.exe} to start the application
+    \end{enumerate}
+
+    \subsection{Install from source}\label{subsec:install-from-source}
+    Clone the repo
+
+
+    \section{Usage}\label{sec:usage}
+    TODO
+
+\end{document}
