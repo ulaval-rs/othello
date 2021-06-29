@@ -4,6 +4,7 @@
 \documentclass[11pt]{article}
 
 % Packages
+\usepackage[margin=2cm]{geometry}
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{hyperref}
@@ -71,16 +72,11 @@ venv\Scripts\pip install -r requirements.txt
 \noindent Re-install the \texttt{GDAL}, \texttt{Shapely}, \texttt{pyproj}, \texttt{Rtree} and \texttt{Fiona} from
 \url{https://www.lfd.uci.edu/~gohlke/pythonlibs} with the following command (tested with python 3.8).
 \begin{code}
-venv\Scripts\pip install --force-reinstall \
-  GDAL-3.2.2-cp38-cp38-win_amd64.whl
-venv\Scripts\pip install --force-reinstall \
-  Shapely-1.7.1-cp38-cp38-win_amd64.whl
-venv\Scripts\pip install --force-reinstall \
-  pyproj-3.0.1-cp38-cp38-win_amd64.whl
-venv\Scripts\pip install --force-reinstall \
-  Rtree-0.9.7-cp38-cp38-win_amd64.whl
-venv\Scripts\pip install --force-reinstall \
-  Fiona-1.8.18-cp38-cp38-win_amd64.whl
+venv\Scripts\pip install --force-reinstall GDAL-3.2.2-cp38-cp38-win_amd64.whl
+venv\Scripts\pip install --force-reinstall Shapely-1.7.1-cp38-cp38-win_amd64.whl
+venv\Scripts\pip install --force-reinstall pyproj-3.0.1-cp38-cp38-win_amd64.whl
+venv\Scripts\pip install --force-reinstall Rtree-0.9.7-cp38-cp38-win_amd64.whl
+venv\Scripts\pip install --force-reinstall Fiona-1.8.18-cp38-cp38-win_amd64.whl
 \end{code}
 
 \subsubsection{Setup the ESRI geodatabase (.gdb) driver support}
@@ -109,13 +105,14 @@ and geographic data in GDB format (ArcGIS proprietary format).
 It consists of two tools: the first being \textit{Criteria}, and the second \textit{Aggregate}.
 
 \subsection{\textit{Criteria}}\label{subsec:criteria}
-The \textit{Criteria} allows to transform the values of a criterion thanks
+The \textit{Criteria} tool allows to transform the values of a criterion thanks
 to a scale present in a macbeth file.
-The data flow is schematized in the \ref{fig:criteria-tool} image.
-Essentially, a column from an ArcGIS GDB file is combined
+The data flow is schematized in the figure\ \ref{fig:criteria-tool}.
+The tool combine a column from an ArcGIS GDB file
 with a linear relation extracted from a MacBeth file to produce
-a new column in the ArcGIS GDB file.
-The linear relation from the MacBeth file is in fact an interpolation from two columns.
+a new column in the GDB file.
+The linear relation from the MacBeth file is in fact an interpolation
+from two columns corresponding to a criterion.
 
 \begin{figure}[H]
     \centering
@@ -125,18 +122,27 @@ The linear relation from the MacBeth file is in fact an interpolation from two c
 \end{figure}
 
 Figure~\ref{fig:criteria-ui} shows the user interface where you can use this tool.
-From this tool, it is possible to load an ArcGIS GDB file,
+From this tool, it is possible to load an GDB file,
 to choose the right layer and finally the column which will be the source one
 (columnX in blue in the figure~\ref{fig:criteria-tool}).
 
 \begin{figure}[H]
-    \includegraphics[width=\linewidth]{../images/criteria_tool.png}
+    \centering
+    \includegraphics[width=.8\linewidth]{../images/criteria_tool.png}
     \caption{\textit{Criteria} tool's user interface}
     \label{fig:criteria-ui}
 \end{figure}
 
 \subsection{\textit{Aggregate}}\label{subsec:aggregate}
 
+The figure\ \ref{fig:aggregate-tool} presents the \textit{Aggregate}'s data flow.
+The \textit{Aggregate} tool allows you to use all the criteria
+already processed via the \textit{Criteria} tool and to make a weighted
+sum in a column named \textit{FinalScore} in an GDB file.
+Note that is possible to use the criterion columns from other GDB files and to write the
+\textit{FinalScore} in a new/empty GDB file.
+Also note that the sum of the weights must be equal to 1
+($\sum_n^N w_n = 1$ where $N$ is the number of criteria).
 
 \begin{figure}[H]
     \centering
@@ -145,11 +151,13 @@ to choose the right layer and finally the column which will be the source one
     \label{fig:aggregate-tool}
 \end{figure}
 
-
-Figure~\ref{fig:aggregate-ui} shows the user interface where you can use this tool.
+Figure\ \ref{fig:aggregate-ui} shows the user interface of this tool.
+It is possible to load GDB files to retrieve the columns one
+by one along the MacBeth weight corresponding to them.
 
 \begin{figure}[H]
-    \includegraphics[width=\linewidth]{../images/aggregate_tool.png}
+    \centering
+    \includegraphics[width=.8\linewidth]{../images/aggregate_tool.png}
     \caption{\textit{Aggregate} tool's user interface}
 \label{fig:aggregate-ui}
 
