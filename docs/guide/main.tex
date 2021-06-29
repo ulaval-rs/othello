@@ -8,11 +8,11 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 
+\usepackage{xcolor}
+\usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 \usetikzlibrary{shapes}
-\usepackage{xcolor}
-\usepackage{graphicx}
 
 \usepackage[skins,listings,breakable]{tcolorbox}
 
@@ -136,5 +136,23 @@ to choose the right layer and finally the column which will be the source one
 \end{figure}
 
 \subsection{\textit{Aggregate}}\label{subsec:aggregate}
+
+
+\begin{figure}[H]
+    \centering
+    \input{diagrams/aggregate.tex}
+    \caption{\textit{Aggregate} tool data flow diagram}
+    \label{fig:aggregate-tool}
+\end{figure}
+
+
+Figure~\ref{fig:aggregate-ui} shows the user interface where you can use this tool.
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{../images/aggregate_tool.png}
+    \caption{\textit{Aggregate} tool's user interface}
+\label{fig:aggregate-ui}
+
+\end{figure}
 
 \end{document}
