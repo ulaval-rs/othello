@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ main, feature/ci-test ]
+    branches: [ main, feature/ci-tests ]
   pull_request:
     branches: [ main ]
 
