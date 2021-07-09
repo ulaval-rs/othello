@@ -16,6 +16,9 @@
 !docs/
 !docs/**
 
+!.github/
+!.github/**
+
 !othello/
 !othello/**
 
