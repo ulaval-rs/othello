@@ -2,7 +2,6 @@ import os
 import shutil
 from distutils.command.build import build
 
-from othello.version import VERSION
 
 
 class CleanBuild(build):
@@ -23,5 +22,5 @@ class CleanBuild(build):
         # Renaming directory
         for build_dir in os.listdir('build'):
             old_name = os.path.join('build', build_dir)
-            new_name = os.path.join('build', f'othello-{VERSION}-' + build_dir.split('.', 1)[1])
+            new_name = os.path.join('build', f'othello)
             os.rename(old_name, new_name)
