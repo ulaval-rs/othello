@@ -1,8 +1,5 @@
-import copy
-import functools
-
 import geopandas
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtCore, QtWidgets
 
 from othello import gis
 from othello.ui import errors
@@ -67,8 +64,8 @@ class AggregateTab(QtWidgets.QWidget):
             self.assert_weights_are_float()
             self.assert_weights_are_normalized()
 
-            common_columns = functools.reduce(lambda c1, c2: set(c1).intersection(set(c2)), self.dfs)
-            df = copy.deepcopy(self.dfs[0][common_columns])
+            common_columns = gis.util.find_common_columns(self.dfs)
+            df = gis.util.make_dataframe_with_common_columns(self.dfs, common_columns)
 
             if to_new_file:
                 filepath = QtWidgets.QFileDialog.getSaveFileName(self)[0]
@@ -131,26 +128,16 @@ class AggregateTab(QtWidgets.QWidget):
             raise errors.SumOfWeightNotEqualsToOneError
 
     def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
-        weighted_columns = []
-
+        criteria_information = []
         for row_index in range(self.table.rowCount()):
-            filepath = self.table.item(row_index, 0).text()
-            layer = self.table.item(row_index, 1).text()
-            criterion = self.table.item(row_index, 2).text()
-            weight = float(self.table.item(row_index, 3).text())
+            criteria_information.append({
+                'filepath': self.table.item(row_index, 0).text(),
+                'layer': self.table.item(row_index, 1).text(),
+                'criterion': self.table.item(row_index, 2).text(),
+                'weight': float(self.table.item(row_index, 3).text()),
+            })
 
-            # Removing the _mb suffix
-            criterion = criterion.replace('_mb', '')
-
-            criterion_geoseries = gis.io.read(filepath, layer=layer)[criterion]
-            df[criterion + '_np'] = criterion_geoseries
-            df[criterion + '_p'] = weight * criterion_geoseries
-            weighted_columns.append(criterion + '_p')
-
-        # Final score in a new series
-        df['FinalScore'] = [0 for _ in range(len(df))]
-        for column in weighted_columns:
-            df['FinalScore'] += df[column]
+        df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information)
 
         return df
 
