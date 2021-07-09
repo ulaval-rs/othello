@@ -37,7 +37,7 @@ class TestUtil:
         assert result == expected
 
     @pytest.mark.parametrize('dfs, common_columns, expected_columns', [
-        ([], []),
+        ([], [], []),
         (read_dataframes(), ['NUMEROCIVI', 'NUMEROCI_1', 'NUMEROCI_2', 'NUMEROCI_3'],
          ['NUMEROCIVI', 'NUMEROCI_1', 'NUMEROCI_2', 'NUMEROCI_3']),
     ])
