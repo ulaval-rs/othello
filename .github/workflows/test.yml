@@ -22,6 +22,8 @@ jobs:
         curl https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-VS2017.zip -o FileGDB_API.zip
         python -c "import sys;print(sys.path)"
         7z x FileGDB_API.zip
+        dir
+        dir .\license\
         copy bin64\FileGDBAPI.dll C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\FileGDBAPI.dll
     - name: Run Tests
       run: |
