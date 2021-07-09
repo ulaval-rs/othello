@@ -22,5 +22,5 @@ class CleanBuild(build):
         # Renaming directory
         for build_dir in os.listdir('build'):
             old_name = os.path.join('build', build_dir)
-            new_name = os.path.join('build', f'othello)
+            new_name = os.path.join('build', f'othello')
             os.rename(old_name, new_name)
