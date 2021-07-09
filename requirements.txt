@@ -9,7 +9,7 @@ colorama==0.4.4
 cx-Freeze==6.5.3
 Fiona @ https://download.lfd.uci.edu/pythonlibs/r4tycu3t/Fiona-1.8.20-cp38-cp38-win_amd64.whl
 future==0.18.2
-GDAL @ https://download.lfd.uci.edu/pythonlibs/r4tycu3t/GDAL-3.2.3-cp38-cp38-win_amd64.whl
+GDAL @ https://download.lfd.uci.edu/pythonlibs/r4tycu3t/GDAL-3.3.1-cp38-cp38-win_amd64.whl
 geopandas==0.9.0
 importlib-metadata==3.7.3
 iniconfig==1.1.1
