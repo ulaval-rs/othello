@@ -23,6 +23,7 @@ jobs:
         python -c "import sys;print(sys.path)"
         mkdir filegdb_api
         tar.exe -xf FileGDB_API.zip -C filegdb_api
+        copy  C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\gdalplugins\disable\ogr_FileGDB.dll C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\gdalplugins\ogr_FileGDB.dll
         copy .\filegdb_api\bin64\FileGDBAPI.dll C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\FileGDBAPI.dll
     - name: Run Tests
       run: |
