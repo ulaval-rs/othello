@@ -21,7 +21,8 @@ jobs:
         python -m pip install -r requirements.txt
         python -c "import sys;print(sys.path)"
         curl https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-VS2017.zip -o FileGDB_API.zip
-        powershell Expand-Archive FileGDB_API.zip
+        tar.exe -x -f FileGDB_API.zip
+        copy bin64\FileGDPAPI.dll C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\FileGDPAPI.dll
     - name: Run Tests
       run: |
         python -m pytest
