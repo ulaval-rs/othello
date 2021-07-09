@@ -19,6 +19,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
+        dir
+        curl https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-VS2017.zip -o FileGDB_API.zip
+        powershell Expand-Archive FileGDB_API.zip
     - name: Run Tests
       run: |
         pytest
