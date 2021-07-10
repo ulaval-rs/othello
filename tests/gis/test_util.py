@@ -22,8 +22,7 @@ def read_dataframes() -> List[GeoDataFrame]:
 
 class TestUtil:
 
-    @pytest.mark.parametrize('dfs, expected', [
-        ([], []),
+    @pytest.mark.parametrize('dfs, expected_columns', [
         (read_dataframes(), [
             'NUMEROCIVI',
             'NUMEROCI_1',
@@ -31,15 +30,18 @@ class TestUtil:
             'NUMEROCI_3',
         ]),
     ])
-    def test_find_common_columns(self, dfs, expected):
+    def test_find_common_columns(self, dfs, expected_columns):
         result = gis.util.find_common_columns(dfs)
 
-        assert result == expected
+        for column in expected_columns:
+            assert column in result
 
     @pytest.mark.parametrize('dfs, common_columns, expected_columns', [
-        ([], [], []),
-        (read_dataframes(), ['NUMEROCIVI', 'NUMEROCI_1', 'NUMEROCI_2', 'NUMEROCI_3'],
-         ['NUMEROCIVI', 'NUMEROCI_1', 'NUMEROCI_2', 'NUMEROCI_3']),
+        (
+                read_dataframes(),
+                ['NUMEROCIVI', 'NUMEROCI_1', 'NUMEROCI_2', 'NUMEROCI_3'],
+                ['NUMEROCIVI', 'NUMEROCI_1', 'NUMEROCI_2', 'NUMEROCI_3']
+        ),
     ])
     def test_make_dataframe_with_common_columns(self, dfs, common_columns, expected_columns):
         result = gis.util.make_dataframe_with_common_columns(dfs, common_columns=common_columns)
@@ -59,7 +61,7 @@ class TestUtil:
                 'criterion': 'NbrArret_mb',
                 'weight': .5,
             }],
-            1,
+            8.0,
     )])
     def test_add_weighted_columns_to_dataframe(self, df, criteria_info, expected_first_final_score):
         result = gis.util.add_weighted_columns_to_dataframe(df, criteria_info)
