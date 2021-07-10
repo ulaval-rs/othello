@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import geopandas
 from PySide2 import QtCore, QtWidgets
 
@@ -80,7 +82,7 @@ class AggregateTab(QtWidgets.QWidget):
                 return
 
             df = self.add_weighted_columns(df)
-            gis.io.write(df, filepath, layer='FinalLayer')
+            gis.io.write(df, filepath, layer=f'FinalLayer-{datetime.now().strftime("%Y-%m-%d-%H:%M:%S")}')
 
             popup = Popup(f'The file "{filepath}" have been written.', self)
             popup.show()
