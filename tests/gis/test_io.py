@@ -11,7 +11,7 @@ SPH_FILEPATH = './tests/data/stations/stations.shp'
 TMP_DIR = './tests/data/tmp'
 
 
-class TestRead:
+class TestIO:
 
     def setup_method(self):
         os.makedirs(TMP_DIR)

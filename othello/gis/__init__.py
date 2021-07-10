@@ -1,5 +1,6 @@
-from . import io
+from . import io, util
 
 __all__ = [
     'io',
+    'util',
 ]
