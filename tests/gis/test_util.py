@@ -63,16 +63,14 @@ class TestUtil:
                 'weight': .5,
                 'criterion_name': 'another-criterion',
             }],
-            (1, .5),
-            (2, .5),
+            .5,
+            .5,
             8.0,
     )])
     def test_add_weighted_columns_to_dataframe(self, df, criteria_info, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score):
         result = gis.util.add_weighted_columns_to_dataframe(df, criteria_info)
 
         assert 'FinalScore' in result.columns
-        assert result['a-criteria_np'][0] == expected_first_criterion_score[0]
-        assert result['a-criteria_p'][0] == expected_first_criterion_score[1]
-        assert result['another-criteria_np'][0] == expected_second_criterion_score[0]
-        assert result['another-criteria_p'][0] == expected_second_criterion_score[1]
+        assert result['a-criteria_p'][0] == expected_first_criterion_score
+        assert result['another-criteria_p'][0] == expected_second_criterion_score
         assert result['FinalScore'][0] == expected_first_final_score
