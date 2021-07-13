@@ -2,6 +2,7 @@ from datetime import datetime
 
 import geopandas
 from PySide2 import QtCore, QtWidgets
+from PySide2.QtWidgets import QMessageBox
 
 from othello import gis
 from othello.ui import errors
@@ -60,11 +61,12 @@ class AggregateTab(QtWidgets.QWidget):
         wizard = CriterionWizard(self, choose_macbeth_file=self.parent.macbeth_parser is None)
         wizard.show()
 
-    def aggregate(self, to_new_file: bool):
+    def aggregate(self, to_new_file: bool, force_normalized_weights: bool = True):
         try:
             self.assert_presence_of_at_least_2_criteria()
             self.assert_weights_are_float()
-            self.assert_weights_are_normalized()
+            if force_normalized_weights:
+                self.assert_weights_are_normalized()
 
             common_columns = gis.util.find_common_columns(self.dfs)
             df = gis.util.make_dataframe_with_common_columns(self.dfs, common_columns)
@@ -96,12 +98,18 @@ class AggregateTab(QtWidgets.QWidget):
             popup.show()
 
         except errors.WeightIsNotAFloatError:
-            popup = Popup(f'Weights must be a float', self)
+            popup = Popup('Weights must be a float', self)
             popup.show()
 
         except errors.SumOfWeightNotEqualsToOneError:
-            popup = Popup(f"Sum of weight must be equal to 1", self)
-            popup.show()
+            answer = QMessageBox.question(
+                self,
+                'Warning',
+                'Sum of weights is not equal to 1, do you want to ignore this warning?',
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+            )
+            if answer == QMessageBox.Yes:
+                self.aggregate(to_new_file, force_normalized_weights=False)
 
         except Exception as e:
             popup = Popup(str(e), self)
