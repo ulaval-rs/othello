@@ -1,3 +1,5 @@
+from typing import List
+
 import geopandas
 import pytest
 
@@ -9,22 +11,29 @@ GDB_FILEPATH = './tests/data/CritereArretsSTS.gdb'
 MACBETH_FILEPATH = './tests/data/RuesPartagéesSherbrooke.mcb'
 
 
-def make_criterion_parameters():
+def make_criterion_parameters(criterion: str):
     parser = MacbethParser(MACBETH_FILEPATH)
     criteria = parser.get_criteria()
 
-    return parser.get_criterion_parameters(criteria[7])
+    if criterion == 'arrets':
+        return parser.get_criterion_parameters(criteria[7])
+    if criterion == 'canopee':
+        return parser.get_criterion_parameters(criteria[2])
+
+    raise ValueError('Criterion not found')
 
 
-@pytest.mark.parametrize('series, criterion_parameters', [
-    (geopandas.read_file(GDB_FILEPATH, layer='ArretsTEST_ON')['NbrArret'], make_criterion_parameters()),
+@pytest.mark.parametrize('series_values, criterion_parameters, expected_first_value', [
+    (geopandas.read_file(GDB_FILEPATH, layer='ArretsTEST_ON')['NbrArret'].values, make_criterion_parameters('arrets'), -46.67),
+    ([15], make_criterion_parameters('arrets'), 50.0),
+    (['15%'], make_criterion_parameters('canopee'), 225.0),
 ])
-def test_evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: CriterionParameters):
-    result = evaluate_new_values(series, criterion_parameters)
+def test_evaluate_new_values(series_values: List, criterion_parameters: CriterionParameters, expected_first_value):
+    result = evaluate_new_values(series_values, criterion_parameters)
 
     assert type(result) == list
-    assert len(result) == len(series)
-    assert result[0] == -46.67  # Expected value of the first element in the test data
+    assert len(result) == len(series_values)
+    assert result[0] == expected_first_value
 
 
 @pytest.mark.parametrize('value, expected_value, expected_type', [

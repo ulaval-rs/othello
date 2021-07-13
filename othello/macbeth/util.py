@@ -6,7 +6,7 @@ import numpy
 from othello.macbeth.criterion_parameters import CriterionParameters
 
 
-def evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: CriterionParameters) -> List:
+def evaluate_new_values(x_to_eval: List[Union[float, int, str]], criterion_parameters: CriterionParameters) -> List:
     # If the levels can be used in a interpolation
     if type(criterion_parameters.levels[0]) in [int, float]:
         x, y = numpy.array(criterion_parameters.levels), numpy.array(criterion_parameters.weights)
@@ -14,13 +14,13 @@ def evaluate_new_values(series: geopandas.GeoSeries, criterion_parameters: Crite
         sorted_indexes = numpy.argsort(x)
         x, y = x[sorted_indexes], y[sorted_indexes]
 
-        new_values = numpy.interp(series.values, x, y)
+        new_values = numpy.interp(x_to_eval, x, y)
 
         return [round(value, 2) for value in new_values]
 
-    # If the levels are actually string label
+    # If the levels are string label
     new_values = []
-    for value in series.values:
+    for value in x_to_eval:
         index_of_level = criterion_parameters.levels.index(value)
         new_values.append(criterion_parameters.weights[index_of_level])
 
