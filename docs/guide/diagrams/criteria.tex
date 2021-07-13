@@ -60,27 +60,22 @@
         minimum width=2.3cm,
         minimum height=2.5cm,
     ] (rec-mb) {};
-    \node [
-        draw,
-        rectangle,
-        xshift=1.55cm,
-        yshift=-3.3cm,
-        minimum width=3cm,
-        minimum height=1cm,
-    ] (rec) {
-        $\textcolor{green}{X_{mb}} = \textcolor{red}{m} * \textcolor{blue}{X} + \textcolor{red}{b}$
-    };
+
+    % Criteria graph
+    \input{diagrams/criteria-graph.tex}
 
     % Labels
-    \node [xshift=2cm, yshift=-4.5cm, text width=6cm] {
-        Where $\textcolor{red}{m}$ and $\textcolor{red}{b}$ come from the\\
-        interpolation $\color{red} Y_2 = m * Y_1 + b$
+    \node [xshift=-3.5cm, yshift=-6.3cm, text width=7cm] {
+        The red dots, taken from the MacBeth data,
+        are used to perform an interpolation ($\textcolor{red}{y_1}$, $\textcolor{red}{y_2}$)
+        which makes it possible to evaluate new values, in green,
+        from the data in the GDB file, in blue ($\textcolor{blue}{x}$, $\textcolor{green}{x_{mb}}$).
     };
 
     % Arrows
     \draw [->, blue] (rec-x) -- (-0.6cm,-3.2cm) -- (-0.1cm,-3.2cm);
     \draw [-, red] (rec-y1) -- (rec-y2);
     \draw [->, red] (rec-y2) -- (-0.1cm,-3.4cm);
-    \draw [->, green] (2.35cm,-2.8cm) -- (rec-mb);
+    \draw [->, green] (2.35cm,-2.3cm) -- (rec-mb);
 
 \end{tikzpicture}
