@@ -2,11 +2,7 @@ class LessThenTwoCriteriaError(ValueError):
     pass
 
 
-class EmptyNewCriterionNameError(ValueError):
-    pass
-
-
-class DuplicateNewCriterionNamesError(ValueError):
+class DuplicateCriterionNamesError(ValueError):
     pass
 
 

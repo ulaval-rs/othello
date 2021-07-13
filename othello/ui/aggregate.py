@@ -35,13 +35,14 @@ class AggregateTab(QtWidgets.QWidget):
         self.table.setGeometry(QtCore.QRect(20, 80, 731, 400))
         self.table.setRowCount(0)
         self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]'])
+        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]', 'criterion name'])
 
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
 
         self.btn_aggregate_existing_file = QtWidgets.QPushButton(
             self,
@@ -65,6 +66,7 @@ class AggregateTab(QtWidgets.QWidget):
         try:
             self.assert_presence_of_at_least_2_criteria()
             self.assert_weights_are_float()
+            self.assert_no_duplicates_in_criterion_names()
             if force_normalized_weights:
                 self.assert_weights_are_normalized()
 
@@ -93,8 +95,12 @@ class AggregateTab(QtWidgets.QWidget):
             popup = Popup('At least 2 criteria must be loaded', self)
             popup.show()
 
-        except (errors.EmptyNewCriterionNameError, errors.DuplicateNewCriterionNamesError):
-            popup = Popup('All criteria must have new criterion name and be different', self)
+        except errors.DuplicateCriterionNamesError:
+            popup = Popup(
+                'All criteria must have different criterion name. '
+                'You may want to choose another criterion or change the criterion name.',
+                self
+            )
             popup.show()
 
         except errors.WeightIsNotAFloatError:
@@ -137,14 +143,26 @@ class AggregateTab(QtWidgets.QWidget):
         if round(sum(weights), 2) != 1.0:
             raise errors.SumOfWeightNotEqualsToOneError
 
+    def assert_no_duplicates_in_criterion_names(self):
+        criterion_names = set()
+
+        for row_index in range(self.table.rowCount()):
+            criterion_name = self.table.item(row_index, 4).text()
+
+            if criterion_name in criterion_names:
+                raise errors.DuplicateCriterionNamesError
+
+            criterion_names.add(criterion_name)
+
     def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
         criteria_information = []
         for row_index in range(self.table.rowCount()):
             criteria_information.append({
                 'filepath': self.table.item(row_index, 0).text(),
                 'layer': self.table.item(row_index, 1).text(),
-                'criterion': self.table.item(row_index, 2).text(),
+                'field': self.table.item(row_index, 2).text(),
                 'weight': float(self.table.item(row_index, 3).text()),
+                'criterion_name': float(self.table.item(row_index, 3).text()),
             })
 
         df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information)
