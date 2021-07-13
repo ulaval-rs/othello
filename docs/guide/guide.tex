@@ -11,6 +11,7 @@
 
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{pgfplots}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 \usetikzlibrary{shapes}
@@ -109,10 +110,9 @@ The \textit{Criteria} tool allows to transform the values of a criterion thanks
 to a scale present in a macbeth file.
 The data flow is schematized in the figure\ \ref{fig:criteria-tool}.
 The tool combine a column from an ArcGIS GDB file
-with a linear relation extracted from a MacBeth file to produce
+with the interpolation extracted from a MacBeth file to produce
 a new column in the GDB file.
-The linear relation from the MacBeth file is in fact an interpolation
-from two columns corresponding to a criterion.
+The interpolation is made from two columns corresponding to a criterion in the MacBeth file.
 
 \begin{figure}[H]
     \centering
