@@ -72,8 +72,8 @@ class TestUtil:
 
         print(result.columns)
         assert 'FinalScore' in result.columns
-        assert result['a-criteria_np'][0] == expected_first_criterion_score[0]
-        assert result['a-criteria_p'][0] == expected_first_criterion_score[1]
-        assert result['another-criteria_np'][0] == expected_second_criterion_score[0]
-        assert result['another-criteria_p'][0] == expected_second_criterion_score[1]
+        assert result['a-criterion_np'][0] == expected_first_criterion_score[0]
+        assert result['a-criterion_p'][0] == expected_first_criterion_score[1]
+        assert result['another-criterion_np'][0] == expected_second_criterion_score[0]
+        assert result['another-criterion_p'][0] == expected_second_criterion_score[1]
         assert result['FinalScore'][0] == expected_first_final_score
