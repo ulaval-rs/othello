@@ -126,6 +126,7 @@ class CriterionWizard(QDialog):
         self.parent().table.setItem(new_row_index, 1, QTableWidgetItem(self.get_layer()))
         self.parent().table.setItem(new_row_index, 2, QTableWidgetItem(self.get_field()))
         self.parent().table.setItem(new_row_index, 3, QTableWidgetItem(self.get_weight()))
+        self.parent().table.setItem(new_row_index, 4, QTableWidgetItem(self.get_field()))
 
         # Adding dataframe to aggregate tab
         self.parent().dfs.append(copy.deepcopy(self.df))

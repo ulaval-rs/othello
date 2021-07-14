@@ -34,7 +34,7 @@ class AggregateTab(QtWidgets.QWidget):
         self.table = QtWidgets.QTableWidget(self)
         self.table.setGeometry(QtCore.QRect(20, 80, 731, 400))
         self.table.setRowCount(0)
-        self.table.setColumnCount(4)
+        self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]', 'criterion name'])
 
         header = self.table.horizontalHeader()
@@ -156,13 +156,14 @@ class AggregateTab(QtWidgets.QWidget):
 
     def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
         criteria_information = []
+
         for row_index in range(self.table.rowCount()):
             criteria_information.append({
                 'filepath': self.table.item(row_index, 0).text(),
                 'layer': self.table.item(row_index, 1).text(),
                 'field': self.table.item(row_index, 2).text(),
                 'weight': float(self.table.item(row_index, 3).text()),
-                'criterion_name': float(self.table.item(row_index, 3).text()),
+                'criterion_name': self.table.item(row_index, 4).text(),
             })
 
         df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information)

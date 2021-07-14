@@ -70,6 +70,7 @@ class TestUtil:
     def test_add_weighted_columns_to_dataframe(self, df, criteria_info, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score):
         result = gis.util.add_weighted_columns_to_dataframe(df, criteria_info)
 
+        print(result.columns)
         assert 'FinalScore' in result.columns
         assert result['a-criterion_np'][0] == expected_first_criterion_score[0]
         assert result['a-criterion_p'][0] == expected_first_criterion_score[1]
