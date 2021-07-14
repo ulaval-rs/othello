@@ -23,18 +23,19 @@ def add_weighted_columns_to_dataframe(df: GeoDataFrame, criteria_information: Li
     weighted_columns = []
 
     for criterion_information in criteria_information:
-        criterion = criterion_information['criterion']
+        field = criterion_information['field']
         filepath = criterion_information['filepath']
         layer = criterion_information['layer']
         weight = criterion_information['weight']
+        criterion_name = criterion_information['criterion_name']
 
         # Removing the _mb suffix
-        criterion = criterion.replace('_mb', '')
+        field = field.replace('_mb', '')
 
-        criterion_geoseries = io.read(filepath, layer=layer)[criterion]
-        df[criterion + '_np'] = criterion_geoseries
-        df[criterion + '_p'] = weight * criterion_geoseries
-        weighted_columns.append(criterion + '_p')
+        criterion_geoseries = io.read(filepath, layer=layer)[field]
+        df[criterion_name + '_np'] = criterion_geoseries
+        df[criterion_name + '_p'] = weight * criterion_geoseries
+        weighted_columns.append(criterion_name + '_p')
 
     # Final score in a new series
     df['FinalScore'] = [0 for _ in range(len(df))]
