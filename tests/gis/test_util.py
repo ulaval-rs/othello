@@ -63,9 +63,9 @@ class TestUtil:
                 'weight': .5,
                 'criterion_name': 'another-criterion',
             }],
-            (8, 4),
-            (8, 4),
-            8.0,
+            (8, 8 * .5),
+            (-46.67, -46.67 * .5),
+            8 * .5 - 46.67 * .5,
     )])
     def test_add_weighted_columns_to_dataframe(self, df, criteria_info, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score):
         result = gis.util.add_weighted_columns_to_dataframe(df, criteria_info)

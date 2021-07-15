@@ -29,9 +29,6 @@ def add_weighted_columns_to_dataframe(df: GeoDataFrame, criteria_information: Li
         weight = criterion_information['weight']
         criterion_name = criterion_information['criterion_name']
 
-        # Removing the _mb suffix
-        field = field.replace('_mb', '')
-
         criterion_geoseries = io.read(filepath, layer=layer)[field]
         df[criterion_name + '_np'] = criterion_geoseries
         df[criterion_name + '_p'] = weight * criterion_geoseries
