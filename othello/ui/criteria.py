@@ -144,7 +144,7 @@ class CriteriaTab(QtWidgets.QWidget):
             answer = QMessageBox.question(
                 self,
                 'Question',
-                'Use level orders rather than raw level values?',
+                'Use indexes rather than level values?',
                 QMessageBox.Yes | QMessageBox.No, QMessageBox.No
             )
 
