@@ -11,8 +11,7 @@ def evaluate_new_values(
         use_indexes: bool = False) -> List:
     # If using indexes (counting from 1) in the macbeth file rather than raw values
     if use_indexes:
-        new_values = []
-        return [criterion_parameters.weights[i-1] for i in x_to_eval_or_indexes]
+        return [criterion_parameters.weights[int(i - 1)] for i in x_to_eval_or_indexes]
 
     # If the levels can be used in a interpolation
     if type(criterion_parameters.levels[0]) in [int, float]:
