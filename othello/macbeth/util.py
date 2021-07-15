@@ -1,12 +1,23 @@
 from typing import Union, List
 
-import geopandas
 import numpy
 
 from othello.macbeth.criterion_parameters import CriterionParameters
 
 
-def evaluate_new_values(x_to_eval: List[Union[float, int, str]], criterion_parameters: CriterionParameters) -> List:
+def evaluate_new_values(
+        x_to_eval: List[Union[float, int, str]],
+        criterion_parameters: CriterionParameters,
+        use_orders: bool = False) -> List:
+    # If using level orders (kind of an index  in macbeth) rather than raw values
+    if use_orders:
+        new_values = []
+        for x in x_to_eval:
+            index_of_level = criterion_parameters.levels_orders.index(x)
+            new_values.append(criterion_parameters.weights[index_of_level])
+
+        return new_values
+
     # If the levels can be used in a interpolation
     if type(criterion_parameters.levels[0]) in [int, float]:
         x, y = numpy.array(criterion_parameters.levels), numpy.array(criterion_parameters.weights)
@@ -20,8 +31,8 @@ def evaluate_new_values(x_to_eval: List[Union[float, int, str]], criterion_param
 
     # If the levels are string label
     new_values = []
-    for value in x_to_eval:
-        index_of_level = criterion_parameters.levels.index(value)
+    for x in x_to_eval:
+        index_of_level = criterion_parameters.levels.index(x)
         new_values.append(criterion_parameters.weights[index_of_level])
 
     return new_values

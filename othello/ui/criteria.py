@@ -4,6 +4,7 @@ from typing import Optional
 import fiona
 import geopandas
 from PySide2 import QtWidgets, QtCore
+from PySide2.QtWidgets import QMessageBox
 from fiona.errors import DriverError
 
 from othello import gis
@@ -95,7 +96,11 @@ class CriteriaTab(QtWidgets.QWidget):
             criterion_name = self.combobox_macbeth_criterion.currentText()
             criterion = self.parent.macbeth_parser.find_criterion(criterion_name)
             self.criterion_parameters = self.parent.macbeth_parser.get_criterion_parameters(criterion)
-            self.macbeth_scale.set_values(self.criterion_parameters.levels, self.criterion_parameters.weights)
+            self.macbeth_scale.set_values(
+                self.criterion_parameters.levels_orders,
+                self.criterion_parameters.levels,
+                self.criterion_parameters.weights
+            )
         except KeyError as e:
             popup = Popup(f"Value not found in the macbeth file for this criterion: {e}", self)
             popup.show()
@@ -136,10 +141,25 @@ class CriteriaTab(QtWidgets.QWidget):
             return
 
         try:
-            self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
-                x_to_eval=self.df[self.combobox_field.currentText()].values,
-                criterion_parameters=self.criterion_parameters
+            answer = QMessageBox.question(
+                self,
+                'Question',
+                'Use level orders rather than raw level values?',
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.No
             )
+
+            if answer == QMessageBox.Yes:
+                self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
+                    x_to_eval=self.df[self.combobox_field.currentText()].values,
+                    criterion_parameters=self.criterion_parameters,
+                    use_orders=True
+                )
+            else:
+                self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
+                    x_to_eval=self.df[self.combobox_field.currentText()].values,
+                    criterion_parameters=self.criterion_parameters,
+                    use_orders=False
+                )
 
             gis.io.write(self.df, self.geo_filepath, layer=self.layer)
 

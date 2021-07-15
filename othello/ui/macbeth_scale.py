@@ -16,12 +16,14 @@ class MacbethScale(QtWidgets.QTableWidget):
         header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
-    def set_values(self, levels: List[Union[str, int, float]], weights: List[float]):
+    def set_values(self, levels_orders: List[int], levels: List[Union[str, int, float]], weights: List[float]):
         self.setRowCount(len(levels))
 
-        for i, (level, weight) in enumerate(zip(levels, weights)):
-            self.setItem(i, 0, QTableWidgetItem(str(level)))
-            self.setItem(i, 1, QTableWidgetItem(str(weight)))
+        for i, (order, level, weight) in enumerate(zip(levels_orders, levels, weights)):
+            self.setItem(i, 0, QTableWidgetItem(str(order)))
+            self.setItem(i, 1, QTableWidgetItem(str(level)))
+            self.setItem(i, 2, QTableWidgetItem(str(weight)))
 
         self.resizeRowsToContents()

@@ -23,10 +23,11 @@ def make_criterion_parameters(criterion: str):
     raise ValueError('Criterion not found')
 
 
-@pytest.mark.parametrize('series_values, criterion_parameters, expected_first_value', [
-    (geopandas.read_file(GDB_FILEPATH, layer='ArretsTEST_ON')['NbrArret'].values, make_criterion_parameters('arrets'), -46.67),
-    ([15], make_criterion_parameters('arrets'), 50.0),
-    (['15%'], make_criterion_parameters('canopee'), 225.0),
+@pytest.mark.parametrize('series_values, criterion_parameters, use_order, expected_first_value', [
+    (geopandas.read_file(GDB_FILEPATH, layer='ArretsTEST_ON')['NbrArret'].values, make_criterion_parameters('arrets'), False, -46.67),
+    ([15], make_criterion_parameters('arrets'), False, 50.0),
+    (['15%'], make_criterion_parameters('canopee'), False, 225.0),
+    ([2], make_criterion_parameters('canopee'), True, 225.0),
 ])
 def test_evaluate_new_values(series_values: List, criterion_parameters: CriterionParameters, expected_first_value):
     result = evaluate_new_values(series_values, criterion_parameters)
