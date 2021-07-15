@@ -137,7 +137,7 @@ class CriteriaTab(QtWidgets.QWidget):
 
         try:
             self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
-                series=self.df[self.combobox_field.currentText()].values,
+                x_to_eval=self.df[self.combobox_field.currentText()].values,
                 criterion_parameters=self.criterion_parameters
             )
 
