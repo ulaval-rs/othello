@@ -8,7 +8,7 @@ class MacbethScale(QtWidgets.QTableWidget):
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.setColumnCount(2)
+        self.setColumnCount(3)
         self.setHorizontalHeaderLabels(['Level', 'Scale'])
 
         # Resize column to take all the horizontal space
