@@ -97,7 +97,7 @@ class CriteriaTab(QtWidgets.QWidget):
             criterion = self.parent.macbeth_parser.find_criterion(criterion_name)
             self.criterion_parameters = self.parent.macbeth_parser.get_criterion_parameters(criterion)
             self.macbeth_scale.set_values(
-                self.criterion_parameters.levels_orders,
+                [i + 1 for i in range(self.criterion_parameters.number_of_levels)],
                 self.criterion_parameters.levels,
                 self.criterion_parameters.weights
             )
@@ -150,15 +150,15 @@ class CriteriaTab(QtWidgets.QWidget):
 
             if answer == QMessageBox.Yes:
                 self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
-                    x_to_eval=self.df[self.combobox_field.currentText()].values,
+                    x_to_eval_or_indexes=self.df[self.combobox_field.currentText()].values,
                     criterion_parameters=self.criterion_parameters,
-                    use_orders=True
+                    use_indexes=True
                 )
             else:
                 self.df[self.combobox_field.currentText() + '_mb'] = evaluate_new_values(
-                    x_to_eval=self.df[self.combobox_field.currentText()].values,
+                    x_to_eval_or_indexes=self.df[self.combobox_field.currentText()].values,
                     criterion_parameters=self.criterion_parameters,
-                    use_orders=False
+                    use_indexes=False
                 )
 
             gis.io.write(self.df, self.geo_filepath, layer=self.layer)

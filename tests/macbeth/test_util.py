@@ -17,8 +17,12 @@ def make_criterion_parameters(criterion: str):
 
     if criterion == 'arrets':
         return parser.get_criterion_parameters(criteria[7])
+
     if criterion == 'canopee':
         return parser.get_criterion_parameters(criteria[2])
+
+    if criterion == 'defavorise':
+        return parser.get_criterion_parameters(criteria[5])
 
     raise ValueError('Criterion not found')
 
@@ -27,7 +31,7 @@ def make_criterion_parameters(criterion: str):
     (geopandas.read_file(GDB_FILEPATH, layer='ArretsTEST_ON')['NbrArret'].values, make_criterion_parameters('arrets'), False, -46.67),
     ([15], make_criterion_parameters('arrets'), False, 50.0),
     (['15%'], make_criterion_parameters('canopee'), False, 225.0),
-    ([2], make_criterion_parameters('canopee'), True, 225.0),
+    ([2], make_criterion_parameters('defavorise'), True, -65.0),
 ])
 def test_evaluate_new_values(series_values: List, criterion_parameters: CriterionParameters, use_orders, expected_first_value):
     result = evaluate_new_values(series_values, criterion_parameters, use_orders)
