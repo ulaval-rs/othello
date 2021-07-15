@@ -166,6 +166,8 @@ class AggregateTab(QtWidgets.QWidget):
                 'criterion_name': self.table.item(row_index, 4).text(),
             })
 
+        popup = Popup(str(criteria_information), self)
+        popup.show()
         df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information)
 
         return df
