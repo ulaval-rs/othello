@@ -113,6 +113,10 @@ The tool combine a column from an ArcGIS GDB file
 with the interpolation extracted from a MacBeth file to produce
 a new column in the GDB file.
 The interpolation is made from two columns corresponding to a criterion in the MacBeth file.
+Note that since \textit{Othello v0.1.5}, it is possible to link the GIS data with
+indexes corresponding to the MacBeth data.
+This means that the columnX in figure\ \ref{fig:criteria-tool} may be indexes of the MacBeth
+rows rather than the raw values of the columnY1.
 
 \begin{figure}[H]
     \centering
@@ -139,10 +143,12 @@ The figure\ \ref{fig:aggregate-tool} presents the \textit{Aggregate}'s data flow
 The \textit{Aggregate} tool allows you to use all the criteria
 already processed via the \textit{Criteria} tool and to make a weighted
 sum in a column named \textit{FinalScore} in an GDB file.
+A non-ponderated and a ponderated column for each criterion will also be wrote in the FinalLayer.
 Note that is possible to use the criterion columns from other GDB files and to write the
 \textit{FinalScore} in a new/empty GDB file.
-Also note that the sum of the weights must be equal to 1
-($\sum_n^N w_n = 1$ where $N$ is the number of criteria).
+Also note that the sum of the weights should be equal to 1
+($\sum_n^N w_n = 1$ where $N$ is the number of criteria), but not necessary.
+In the event where the sum is not equal to 1, a warning will be shown.
 
 \begin{figure}[H]
     \centering
@@ -154,6 +160,8 @@ Also note that the sum of the weights must be equal to 1
 Figure\ \ref{fig:aggregate-ui} shows the user interface of this tool.
 It is possible to load GDB files to retrieve the columns one
 by one along the MacBeth weight corresponding to them.
+Note that since \textit{Othello v0.1.4}, it is possible to rename the
+final criterion names via the user interface.
 
 \begin{figure}[H]
     \centering
