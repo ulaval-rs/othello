@@ -35,7 +35,7 @@ class AggregateTab(QtWidgets.QWidget):
         self.table.setGeometry(QtCore.QRect(20, 80, 731, 400))
         self.table.setRowCount(0)
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]', 'criterion name'])
+        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]', 'Criterion name'])
 
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
@@ -82,13 +82,12 @@ class AggregateTab(QtWidgets.QWidget):
                 False
             )
             if not (has_not_failed and join_on_column):
-                Popup('No column to join data have been selected. Aborting the aggregation', self).show()
                 return
 
             df = gis.util.make_dataframe_with_common_columns(self.dfs, common_columns)
 
             if to_new_file:
-                filepath = QtWidgets.QFileDialog.getSaveFileName(self)[0]
+                filepath = QtWidgets.QFileDialog.getSaveFileName(self, 'Save to file', '', 'GDB (*.gdb)')[0]
             else:
                 filepath = QtWidgets.QFileDialog.getExistingDirectory(self)
 
