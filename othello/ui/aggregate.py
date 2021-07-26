@@ -2,7 +2,7 @@ from datetime import datetime
 
 import geopandas
 from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QMessageBox
+from PySide2.QtWidgets import QInputDialog, QMessageBox
 
 from othello import gis
 from othello.ui import errors
@@ -35,7 +35,7 @@ class AggregateTab(QtWidgets.QWidget):
         self.table.setGeometry(QtCore.QRect(20, 80, 731, 400))
         self.table.setRowCount(0)
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]', 'criterion name'])
+        self.table.setHorizontalHeaderLabels(['Criterion', 'Layer', 'Field', 'Weight [0-1]', 'Criterion name'])
 
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
@@ -71,10 +71,23 @@ class AggregateTab(QtWidgets.QWidget):
                 self.assert_weights_are_normalized()
 
             common_columns = gis.util.find_common_columns(self.dfs)
+
+            # Choose the column on which the table join will be based
+            join_on_column, has_not_failed = QInputDialog.getItem(
+                self,
+                'Question',
+                'Choose the column on which the table join will be based.',
+                common_columns,
+                0,
+                False
+            )
+            if not (has_not_failed and join_on_column):
+                return
+
             df = gis.util.make_dataframe_with_common_columns(self.dfs, common_columns)
 
             if to_new_file:
-                filepath = QtWidgets.QFileDialog.getSaveFileName(self)[0]
+                filepath = QtWidgets.QFileDialog.getSaveFileName(self, 'Save to file', '', 'GDB (*.gdb)')[0]
             else:
                 filepath = QtWidgets.QFileDialog.getExistingDirectory(self)
 
@@ -85,7 +98,7 @@ class AggregateTab(QtWidgets.QWidget):
                 popup.show()
                 return
 
-            df = self.add_weighted_columns(df)
+            df = self.add_weighted_columns(df, join_on_column)
             gis.io.write(df, filepath, layer=f'FinalLayer-{datetime.now().strftime("%Y-%m-%d-%H:%M:%S")}')
 
             popup = Popup(f'The file "{filepath}" have been written.', self)
@@ -154,7 +167,7 @@ class AggregateTab(QtWidgets.QWidget):
 
             criterion_names.add(criterion_name)
 
-    def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
+    def add_weighted_columns(self, df: geopandas.GeoDataFrame, join_on: str) -> geopandas.GeoDataFrame:
         criteria_information = []
 
         for row_index in range(self.table.rowCount()):
@@ -166,7 +179,7 @@ class AggregateTab(QtWidgets.QWidget):
                 'criterion_name': self.table.item(row_index, 4).text(),
             })
 
-        df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information)
+        df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information, join_on=join_on)
 
         return df
 

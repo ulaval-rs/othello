@@ -48,7 +48,7 @@ class TestUtil:
 
         assert list(result.columns) == expected_columns
 
-    @pytest.mark.parametrize('df, criteria_info, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score', [(
+    @pytest.mark.parametrize('df, criteria_info, join_on_column, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score', [(
             geopandas.read_file(GDB_FILEPATH, driver='FileGDB', layer='ArretsTEST_ON'),
             [{
                 'filepath': GDB_FILEPATH,
@@ -63,12 +63,13 @@ class TestUtil:
                 'weight': .5,
                 'criterion_name': 'another-criterion',
             }],
+            'ID',
             (8, 8 * .5),
             (-46.67, -46.67 * .5),
             8 * .5 - 46.67 * .5,
     )])
-    def test_add_weighted_columns_to_dataframe(self, df, criteria_info, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score):
-        result = gis.util.add_weighted_columns_to_dataframe(df, criteria_info)
+    def test_add_weighted_columns_to_dataframe(self, df, criteria_info, join_on_column, expected_first_criterion_score, expected_second_criterion_score, expected_first_final_score):
+        result = gis.util.add_weighted_columns_to_dataframe(df, criteria_info, join_on_column)
 
         assert 'FinalScore' in result.columns
         assert result['a-criterion_np'][0] == expected_first_criterion_score[0]
