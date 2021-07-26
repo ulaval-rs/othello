@@ -2,7 +2,7 @@ from datetime import datetime
 
 import geopandas
 from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QMessageBox
+from PySide2.QtWidgets import QInputDialog, QMessageBox
 
 from othello import gis
 from othello.ui import errors
@@ -71,6 +71,19 @@ class AggregateTab(QtWidgets.QWidget):
                 self.assert_weights_are_normalized()
 
             common_columns = gis.util.find_common_columns(self.dfs)
+
+            # Choose the column on which the table join will be based
+            item, has_not_failed = QInputDialog.getItem(
+                parent=self,
+                title='Question',
+                label='Choose the column on which the table join will be based.',
+                items=common_columns,
+                current=0,
+                editable=False
+            )
+            if has_not_failed and item:
+                Popup(str(item), self).show()
+
             df = gis.util.make_dataframe_with_common_columns(self.dfs, common_columns)
 
             if to_new_file:
