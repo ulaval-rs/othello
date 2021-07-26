@@ -73,16 +73,17 @@ class AggregateTab(QtWidgets.QWidget):
             common_columns = gis.util.find_common_columns(self.dfs)
 
             # Choose the column on which the table join will be based
-            item, has_not_failed = QInputDialog.getItem(
-                parent=self,
-                title='Question',
-                label='Choose the column on which the table join will be based.',
-                items=common_columns,
-                current=0,
-                editable=False
+            join_on_column, has_not_failed = QInputDialog.getItem(
+                self,
+                'Question',
+                'Choose the column on which the table join will be based.',
+                common_columns,
+                0,
+                False
             )
-            if has_not_failed and item:
-                Popup(str(item), self).show()
+            if not (has_not_failed and join_on_column):
+                Popup('No column to join data have been selected. Aborting the aggregation', self).show()
+                return
 
             df = gis.util.make_dataframe_with_common_columns(self.dfs, common_columns)
 
@@ -98,7 +99,7 @@ class AggregateTab(QtWidgets.QWidget):
                 popup.show()
                 return
 
-            df = self.add_weighted_columns(df)
+            df = self.add_weighted_columns(df, join_on_column)
             gis.io.write(df, filepath, layer=f'FinalLayer-{datetime.now().strftime("%Y-%m-%d-%H:%M:%S")}')
 
             popup = Popup(f'The file "{filepath}" have been written.', self)
@@ -167,7 +168,7 @@ class AggregateTab(QtWidgets.QWidget):
 
             criterion_names.add(criterion_name)
 
-    def add_weighted_columns(self, df: geopandas.GeoDataFrame) -> geopandas.GeoDataFrame:
+    def add_weighted_columns(self, df: geopandas.GeoDataFrame, join_on: str) -> geopandas.GeoDataFrame:
         criteria_information = []
 
         for row_index in range(self.table.rowCount()):
@@ -179,7 +180,7 @@ class AggregateTab(QtWidgets.QWidget):
                 'criterion_name': self.table.item(row_index, 4).text(),
             })
 
-        df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information)
+        df = gis.util.add_weighted_columns_to_dataframe(df, criteria_information, join_on=join_on)
 
         return df
 
