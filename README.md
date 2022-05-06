@@ -10,7 +10,6 @@ The second, `Aggregate`, allows you to aggregate all these values in order to ca
 ## User guide
 Please see the user guide for more detailed information:
 https://github.com/ulaval-rs/othello/raw/main/docs/guide.pdf
-<<<<<<< HEAD
 
 
 # Contributors
@@ -37,5 +36,3 @@ git push origin your-branch-name
 ```
 6. Make a Pull request from GitHub (`https://github.com/<your-username>/peatland-dashboard/pulls`)
 from your branch to the main branch.
-=======
->>>>>>> d62c559 (Removing documentation source files since they are now on overleaf (#24))
