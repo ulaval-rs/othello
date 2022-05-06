@@ -7,9 +7,9 @@ click-plugins==1.1.1
 cligj==0.7.1
 colorama==0.4.4
 cx-Freeze==6.5.3
-Fiona @ https://download.lfd.uci.edu/pythonlibs/y2rycu7g/Fiona-1.8.21-cp38-cp38-win_amd64.whl
+./dependencies/Fiona-1.8.21-cp38-cp38-win_amd64.whl
 future==0.18.2
-GDAL @ https://download.lfd.uci.edu/pythonlibs/y2rycu7g/GDAL-3.3.1-cp38-cp38-win_amd64.whl
+./dependencies/GDAL-3.3.3-cp38-cp38-win_amd64.whl
 geopandas==0.9.0
 importlib-metadata==3.7.3
 iniconfig==1.1.1
@@ -29,7 +29,7 @@ pytz==2021.1
 pywin32-ctypes==0.2.0
 Rtree==0.9.7
 Shapely==1.7.1
-shiboken2==5.15.2
+slhiboken2==5.15.2
 six==1.15.0
 toml==0.10.2
 zipp==3.4.1
