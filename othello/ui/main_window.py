@@ -1,5 +1,9 @@
 from typing import Optional
 
+# Fiona need to be imported before geopandas to avoid a current bug
+# https://github.com/Toblerity/Fiona/issues/944
+import fiona
+
 from PySide2 import QtCore, QtWidgets
 from PySide2.QtWidgets import QWidget
 
