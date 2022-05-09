@@ -9,7 +9,6 @@ The second, `Aggregate`, allows you to aggregate all these values in order to ca
 
 ## User guide
 Please see the user guide for more detailed information:
-https://github.com/ulaval-rs/othello/raw/main/docs/guide.pdf
 
 
 # Contributors
