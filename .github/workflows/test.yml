@@ -19,6 +19,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
+        tree /f C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\
         curl https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-VS2017.zip -o FileGDB_API.zip
         mkdir filegdb_api
         tar.exe -xf FileGDB_API.zip -C filegdb_api
