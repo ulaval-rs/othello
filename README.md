@@ -33,5 +33,5 @@ git add .
 git commit -m "message about the changes"
 git push origin your-branch-name
 ```
-6. Make a Pull request from GitHub (`https://github.com/<your-username>/peatland-dashboard/pulls`)
+6. Make a Pull request from GitHub (`https://github.com/<your-username>/othello/pulls`)
 from your branch to the main branch.
