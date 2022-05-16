@@ -1,6 +1,9 @@
 import os
 import shutil
 
+# Fiona need to be imported before geopandas to avoid a current bug
+# https://github.com/Toblerity/Fiona/issues/944
+import fiona
 import geopandas
 import pytest
 

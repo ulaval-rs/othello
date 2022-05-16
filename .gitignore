@@ -6,6 +6,9 @@
 !setup.py
 !requirements.txt
 
+!dependencies/
+!dependencies/**
+
 !licenses/
 !licenses/**
 !LICENSE
