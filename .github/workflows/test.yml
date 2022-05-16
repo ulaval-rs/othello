@@ -11,22 +11,22 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
+    - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 3.9.12
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install ./dependencies/GDAL-3.3.3-cp38-cp38-win_amd64.whl
-        python -m pip install Fiona==1.8.20
+        python -m pip install ./dependencies/GDAL-3.3.2-cp39-cp39-win_amd64.whl
+        python -m pip install ./dependencies/Fiona-1.8.20-cp39-cp39-win_amd64.whl
         python -m pip install -r requirements.txt
-        tree /f C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\
-        copy C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\gdalplugins\disabled\ogr_FileGDB.dll C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\gdalplugins\ogr_FileGDB.dll
+        tree /f C:\\hostedtoolcache\windows\Python\3.9.12\x64\lib\site-packages\
+        copy C:\\hostedtoolcache\windows\Python\3.9.12\x64\lib\site-packages\osgeo\gdalplugins\disabled\ogr_FileGDB.dll C:\\hostedtoolcache\windows\Python\3.9.12\x64\lib\site-packages\osgeo\gdalplugins\ogr_FileGDB.dll
         curl https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-VS2017.zip -o FileGDB_API.zip
         mkdir filegdb_api
         tar.exe -xf FileGDB_API.zip -C filegdb_api
-        copy .\filegdb_api\bin64\FileGDBAPI.dll C:\\hostedtoolcache\windows\Python\3.8.10\x64\lib\site-packages\osgeo\FileGDBAPI.dll
+        copy .\filegdb_api\bin64\FileGDBAPI.dll C:\\hostedtoolcache\windows\Python\3.9.12\x64\lib\site-packages\osgeo\FileGDBAPI.dll
     - name: Run Tests
       run: |
         python -m pytest
